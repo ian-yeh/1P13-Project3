@@ -1,9 +1,19 @@
-Hi team,
+# DARTS Transporatation Scheduler
+*by Ian, Derin, Omar and Daniel* (team Thurs-54)
 
-so this is the repo for the app we're going to build.
+## Installation Instructions
+### Frontend
+```bash
+cd frontend
+npm install
+npx expo start
+```
 
-jsclkjsf;aldsdkjf ;lakjdf;lasdkfj
-
-
-
-hi my name is Derin
+### Backend
+```bash
+cd backend
+# if you haven't made the virtual environment file yet, do python3 -m venv .venv first
+source .venv/bin/activate
+pip install -r requirements.txt
+fastapi run main.py
+```
