@@ -1,0 +1,25 @@
+# general bad files
+.DS_Store
+.env
+.env.local
+.vscode/
+
+# for frontend stuff
+node_modules/
+dist/
+.expo/
+.expo-shared/
+.metro-cache/
+
+ios/
+ios/build/
+
+android/
+android/build/
+
+.gradle/
+
+# for backend stuff
+.venv/
+build/
+dist/
