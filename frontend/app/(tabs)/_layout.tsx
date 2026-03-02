@@ -51,7 +51,8 @@ export default function TabLayout() {
               <IconSymbol size={28} name="seal" color={color} />
             </View>),
         }}
+
       />
-    </Tabs>
+    </Tabs >
   );
 }

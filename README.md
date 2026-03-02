@@ -12,8 +12,14 @@ npx expo start
 ### Backend
 ```bash
 cd backend
-# if you haven't made the virtual environment file yet, do python3 -m venv .venv first
+# if you haven't made the virtual environment file yet, do python3 -m venv .venv first  
+# MAC
 source .venv/bin/activate
 pip install -r requirements.txt
 fastapi run main.py
+# Windows
+.venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --reload
+
 ```
