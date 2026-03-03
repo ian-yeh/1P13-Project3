@@ -42,16 +42,16 @@ export default function TabLayout() {
             </View>),
         }}
       />
+
       <Tabs.Screen
         name="setting"
         options={{
           title: 'Settings',
           tabBarIcon: ({ color }) => (
             <View style={{ marginTop: 5, paddingBottom: 2 }}>
-              <IconSymbol size={28} name="seal" color={color} />
+              <IconSymbol size={28} name="gear" color={color} />
             </View>),
         }}
-
       />
     </Tabs >
   );
