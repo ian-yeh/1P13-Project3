@@ -3,6 +3,7 @@
 .env
 .env.local
 .vscode/
+.idea/
 
 # for frontend stuff
 node_modules/
