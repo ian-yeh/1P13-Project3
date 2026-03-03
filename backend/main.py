@@ -11,6 +11,10 @@ async def root():
 
 @app.post("/api/schedule")
 async def schedule(event_data: Event):
-    database_worker.write_event(event_data.name, event_data.date, event_data.location)
+    database_worker.write_event(
+        event_data.name, 
+        event_data.date, 
+        event_data.location
+    )
 
     return {"message": "Task scheduled successfully"}
