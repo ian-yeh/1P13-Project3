@@ -1,8 +1,9 @@
 // file to handle api calls to the backend
 
-// eventData is a generic object cuz we still don't have a defined schema
+const API_BASE_URL = 'http://localhost:8000';
+
 export function scheduleEvent(eventData: any) {
-    return fetch('http://localhost:8000/schedule', {
+    return fetch(`${API_BASE_URL}/schedule`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -13,14 +14,17 @@ export function scheduleEvent(eventData: any) {
     .catch(error => console.error('Error scheduling event:', error));
 }
 
+// get all events attached to a specific user
+// TODO: fetch via specific user, not in total.
 export function getEvents() {
-    return fetch('http://localhost:8000/events')
+    return fetch(`${API_BASE_URL}/events`)
         .then(response => response.json())
         .catch(error => console.error('Error fetching events:', error));
 }
 
+// updating user details in db, using user ID that is stored in the userData object
 export function updateUser(userData: any) {
-    return fetch('http://localhost:8000/update_user', {
+    return fetch(`${API_BASE_URL}/update_user`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -29,4 +33,16 @@ export function updateUser(userData: any) {
     })
     .then(response => response.json())
     .catch(error => console.error('Error updating user:', error));
+}
+
+// fetching user details from db, via user id
+export function getUser(userId: string) {
+    return fetch(`${API_BASE_URL}/api/get_user/${userId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('User not found');
+            }
+            return response.json();
+        })
+        .catch(error => console.error('Error fetching user:', error));
 }

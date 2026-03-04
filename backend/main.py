@@ -29,3 +29,11 @@ async def update_user(user_id: str, user_data: User):
     )
 
     return {"message": "User updated successfully"}
+
+@app.get("/api/get_user/{user_id}")
+async def get_user(user_id: str):
+    user = database_worker.get_user(user_id)
+    if user:
+        return user
+    else:
+        return {"message": "User not found"}, 404

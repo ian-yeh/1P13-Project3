@@ -1,12 +1,13 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet, StatusBar, TouchableOpacity, Modal, TextInput, View, Text } from 'react-native';
+import { StyleSheet, StatusBar, TouchableOpacity, Modal, TextInput, View, Text } from 'react-native';
 import { useState, useEffect } from 'react';
 
 import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { getUser } from '@/api/api';
+import { useUser } from '@/store/useStore';
+
+//import { Link } from 'expo-router';
 
 export default function HomeScreen() {
   const [userId, setUserId] = useState('');
@@ -20,9 +21,19 @@ export default function HomeScreen() {
     }
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (inputValue.trim()) {
       setUserId(inputValue.trim());
+
+      // fetch user details
+      const response = await getUser(inputValue.trim());
+      useUser.setState({ 
+        userId: inputValue.trim(), 
+        name: response.name,
+        passengerNumber: response.passenger_number, 
+        mobilityDetails: response.mobility_details 
+      });
+
       setShowModal(false);
     }
   };
@@ -40,7 +51,7 @@ export default function HomeScreen() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Enter User ID</Text>
+            <Text style={styles.modalTitle}>Enter User ID (just type 1 for demo)</Text>
             <TextInput
               style={styles.modalInput}
               value={inputValue}

@@ -1,12 +1,15 @@
-import { Image } from 'expo-image';
 import { StyleSheet, View, StatusBar, TextInput, TouchableOpacity, Text } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
+
 import { Fonts } from '@/constants/theme';
+
+import { useUser } from '@/store/useStore';
 
 export default function TabTwoScreen() {
     const [name, setName] = useState('');
@@ -18,6 +21,14 @@ export default function TabTwoScreen() {
         console.log('Settings saved:', { name, passengerNumber, mobilityDetails });
         navigator.goBack();
     }
+
+    // fetching global user state
+    useEffect(() => {
+        const userData: any = useUser.getState();
+        setName(userData.name);
+        setPassengerNumber(userData.passengerNumber.toString());
+        setMobilityDetails(userData.mobilityDetails);
+    }, []);
 
     return (
         <ParallaxScrollView
@@ -56,7 +67,6 @@ export default function TabTwoScreen() {
                 <TextInput style={styles.inputs} value={mobilityDetails} onChangeText={setMobilityDetails} />
             </View>
 
-            <ThemedText> {name} | {passengerNumber} | {mobilityDetails}</ThemedText>
 
             <TouchableOpacity style={styles.buttons} onPress={handleSave}>
                 <Text style={styles.buttonText}>Save</Text>
