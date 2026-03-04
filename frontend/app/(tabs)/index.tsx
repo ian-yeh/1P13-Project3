@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet, StatusBar, TouchableOpacity } from 'react-native';
+import { Platform, StyleSheet, StatusBar, TouchableOpacity, Modal, TextInput, View, Text } from 'react-native';
+import { useState, useEffect } from 'react';
 
 import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
@@ -8,10 +9,53 @@ import { ThemedView } from '@/components/themed-view';
 import { Link } from 'expo-router';
 
 export default function HomeScreen() {
+  const [userId, setUserId] = useState('');
+  const [showModal, setShowModal] = useState(true);
+  const [inputValue, setInputValue] = useState('');
   const name = 'Mark';
+
+  useEffect(() => {
+    if (!userId) {
+      setShowModal(true);
+    }
+  }, []);
+
+  const handleSubmit = () => {
+    if (inputValue.trim()) {
+      setUserId(inputValue.trim());
+      setShowModal(false);
+    }
+  };
+
   return (
 
     <ThemedView style={styles.background}>
+
+      {/** This mdodal is to set the user id */}
+      <Modal
+        visible={showModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => {}}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Enter User ID</Text>
+            <TextInput
+              style={styles.modalInput}
+              value={inputValue}
+              onChangeText={setInputValue}
+              placeholder="User ID"
+              autoFocus
+              onSubmitEditing={handleSubmit}
+            />
+            <TouchableOpacity style={styles.modalButton} onPress={handleSubmit}>
+              <Text style={styles.modalButtonText}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <ThemedView style={styles.topbox}>
         <ThemedView style={{ flex: 1, backgroundColor: '#9676E5', justifyContent: 'flex-start', alignItems: 'center' }}>
           <ThemedView style={styles.titleContainer}>
@@ -106,6 +150,46 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     color: '#453B5F',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    padding: 30,
+    width: 300,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#453B5F',
+  },
+  modalInput: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#9676E5',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 20,
+    fontSize: 16,
+  },
+  modalButton: {
+    backgroundColor: '#9676E5',
+    padding: 12,
+    borderRadius: 8,
+    width: '100%',
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 
 
