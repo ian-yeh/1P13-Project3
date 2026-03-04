@@ -1,25 +1,24 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet, View, StatusBar, TextInput } from 'react-native';
+import { StyleSheet, View, StatusBar, TextInput, TouchableOpacity, Text } from 'react-native';
 import { useState } from 'react';
-import { React } from 'react';
-
+import { useNavigation } from '@react-navigation/native';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Fonts } from '@/constants/theme';
-import { Button } from '@react-navigation/elements';
-
-
-type ButtonType = {
-    children: string;
-    colorscheme: 'light' | 'dark' | "red" | "blue";
-}
 
 export default function TabTwoScreen() {
     const [name, setName] = useState('');
     const [passengerNumber, setPassengerNumber] = useState('');
     const [mobilityDetails, setMobilityDetails] = useState('');
+    const navigator = useNavigation();
+
+    const handleSave = () => {
+        console.log('Settings saved:', { name, passengerNumber, mobilityDetails });
+        navigator.goBack();
+    }
+
     return (
         <ParallaxScrollView
             headerBackgroundColor={{ light: '#411919', dark: '#99c7c7' }}
@@ -59,8 +58,9 @@ export default function TabTwoScreen() {
 
             <ThemedText> {name} | {passengerNumber} | {mobilityDetails}</ThemedText>
 
-            <Button colorscheme="blue" onPress={() => navigation.goBack()}>Save</Button>
-
+            <TouchableOpacity style={styles.buttons} onPress={handleSave}>
+                <Text style={styles.buttonText}>Save</Text>
+            </TouchableOpacity>
 
         </ParallaxScrollView>
     );
@@ -88,5 +88,16 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
     },
-
+    buttons: {
+        backgroundColor: '#5544f0',
+        padding: 12,
+        borderRadius: 8,
+        alignItems: 'center',
+        margin: 12,
+    },
+    buttonText: {
+        color: '#ffffff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    }
 });

@@ -14,3 +14,15 @@ class Event(BaseModel):
             "date": self.date,
             "location": self.location
         }
+
+class User(BaseModel):
+    name: str
+    passenger_number: int
+    mobility_details: str
+
+    def to_firestore(self):
+        return {
+            "name": self.name,
+            "passenger_number": self.passenger_number,
+            "mobility_details": self.mobility_details
+        }
