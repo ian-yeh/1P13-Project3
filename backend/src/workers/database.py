@@ -28,7 +28,6 @@ class DatabaseWorker:
         pass
 
     def update_user(self, user_id, name=None, passenger_number=None, mobility_details=None):
-        print(f"Updating user {user_id} with name: {name}, passenger_number: {passenger_number}, mobility_details: {mobility_details}")
         user_ref = self.db.collection("users").document(user_id)
         user_ref.update({
             "name": name,

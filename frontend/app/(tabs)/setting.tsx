@@ -10,16 +10,26 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Fonts } from '@/constants/theme';
 
 import { useUser } from '@/store/useStore';
+import { updateUser } from '@/api/api';
 
 export default function TabTwoScreen() {
     const [name, setName] = useState('');
     const [passengerNumber, setPassengerNumber] = useState('');
     const [mobilityDetails, setMobilityDetails] = useState('');
+    const [userId, setUserId] = useState('');
     const navigator = useNavigation();
 
-    const handleSave = () => {
-        console.log('Settings saved:', { name, passengerNumber, mobilityDetails });
-        navigator.goBack();
+    const handleSave = async () => {
+        console.log('Settings saved:', { name, passengerNumber, mobilityDetails, userId });
+        const response = await updateUser(userId, {
+          name: name,
+          passenger_number: passengerNumber,
+          mobility_details: mobilityDetails,
+          user_id: userId
+        })
+
+        console.log(response)
+        //navigator.goBack();
     }
 
     // fetching global user state
@@ -28,6 +38,7 @@ export default function TabTwoScreen() {
         setName(userData.name);
         setPassengerNumber(userData.passengerNumber.toString());
         setMobilityDetails(userData.mobilityDetails);
+        setUserId(userData.userId);
     }, []);
 
     return (
@@ -94,9 +105,12 @@ const styles = StyleSheet.create({
     },
     inputs: {
         height: 40,
-        margin: 12,
+        marginTop: 4,
+        marginBottom: 12,
         borderWidth: 1,
         padding: 10,
+        borderRadius: 8,
+        borderColor: '#333',
     },
     buttons: {
         backgroundColor: '#5544f0',

@@ -17,7 +17,7 @@ class Event(BaseModel):
 
 class User(BaseModel):
     name: str
-    passenger_number: int
+    passenger_number: str
     mobility_details: str
     user_id: str
 

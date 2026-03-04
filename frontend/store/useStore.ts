@@ -5,6 +5,6 @@ import { create } from 'zustand'
 export const useUser = create((set) => ({
     userId: '',
     name: '',
-    passengerNumber: 0,
+    passengerNumber: '',
     mobilityDetails: '',
 }))

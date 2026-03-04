@@ -1,6 +1,6 @@
 // file to handle api calls to the backend
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'http://localhost:8000/api';
 
 export function scheduleEvent(eventData: any) {
     return fetch(`${API_BASE_URL}/schedule`, {
@@ -23,8 +23,8 @@ export function getEvents() {
 }
 
 // updating user details in db, using user ID that is stored in the userData object
-export function updateUser(userData: any) {
-    return fetch(`${API_BASE_URL}/update_user`, {
+export function updateUser(userId: string, userData: any) {
+    return fetch(`${API_BASE_URL}/update_user/${userId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -37,7 +37,7 @@ export function updateUser(userData: any) {
 
 // fetching user details from db, via user id
 export function getUser(userId: string) {
-    return fetch(`${API_BASE_URL}/api/get_user/${userId}`)
+    return fetch(`${API_BASE_URL}/get_user/${userId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('User not found');
