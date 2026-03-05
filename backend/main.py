@@ -1,21 +1,14 @@
 from fastapi import FastAPI
-<<<<<<< omar
 from src.workers.caller import CallingAgent
-=======
 from src.workers.database import DatabaseWorker
 from src.models.core_models import Event, User
->>>>>>> main
 
 app = FastAPI()
 database_worker = DatabaseWorker()
 
 @app.get("/")
 async def root():
-<<<<<<< omar
 
-
-=======
->>>>>>> main
     return {"message": "Hello World"}
 
 @app.post("/api/schedule")
@@ -28,8 +21,6 @@ async def schedule(event_data: Event):
 
     return {"message": "Task scheduled successfully"}
 
-<<<<<<< omar
-=======
 @app.post("/api/update_user/{user_id}")
 async def update_user(user_id: str, user_data: User):
     database_worker.update_user(
@@ -48,4 +39,3 @@ async def get_user(user_id: str):
         return user
     else:
         return {"message": "User not found"}, 404
->>>>>>> main
