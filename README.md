@@ -17,7 +17,7 @@ cd backend
 source .venv/bin/activate
 pip install -r requirements.txt
 fastapi run main.py
-# Windows
+# Windows    -     python -m venv .venv 
 .venv\Scripts\activate
 pip install -r requirements.txt
 uvicorn main:app --reload
