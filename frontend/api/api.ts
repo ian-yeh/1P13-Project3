@@ -1,6 +1,13 @@
 // file to handle api calls to the backend
+import { Platform } from "react-native";
 
-const API_BASE_URL = 'http://localhost:8000/api';
+// for android people - they use a different port ig
+const API_HOST =
+  Platform.OS === "android"
+    ? "http://10.0.2.2:8000"
+    : "http://127.0.0.1:8000";
+
+const API_BASE_URL = `${API_HOST}/api`;
 
 export function scheduleEvent(eventData: any) {
     return fetch(`${API_BASE_URL}/schedule`, {
