@@ -2,9 +2,19 @@ from fastapi import FastAPI
 from src.workers.caller import CallingAgent
 from src.workers.database import DatabaseWorker
 from src.models.core_models import Event, User
+from dotenv import load_dotenv
+import os
+
+# loading env vars
+load_dotenv()
+SID = os.getenv("SID")
+TOKEN = os.getenv("TOKEN")
+TWILIO_NUMBER = os.getenv("TWILIO_NUMBER")
+OMAR = os.getenv("OMAR")
 
 app = FastAPI()
 database_worker = DatabaseWorker()
+calling_agent = CallingAgent(SID, TOKEN, TWILIO_NUMBER)
 
 @app.get("/")
 async def root():
@@ -15,6 +25,13 @@ async def root():
 @app.post("/api/create_event")
 async def create_event(event_data: Event):
     database_worker.write_event(event_data.to_firestore())
+    
+    # calling Omar's number
+    mp3_link = "https://drive.google.com/file/d/1CnUncHXdaykLl1FmLfdcO83AQVZ8m_DX/view?usp=sharing"
+    call_result = calling_agent.call(OMAR, mp3_link)
+
+    print(call_result)
+
 
     return {"message": "Event created successfully"}
 
