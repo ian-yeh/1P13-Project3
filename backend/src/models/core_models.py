@@ -1,19 +1,28 @@
 # this is the file to store the models - the stuff that's going in and out of the db 
 # basically making sure everything is standardized 
-import datetime
+from datetime import datetime
+from typing import Optional
 from pydantic import BaseModel
 
 class Event(BaseModel):
     name: str
-    date: str
+    date: datetime
     location: str
+    arrival_time: datetime
+    departure_time: datetime
+    user_id: str
 
     def to_firestore(self):
-        return {
+        data = {
             "name": self.name,
-            "date": self.date,
-            "location": self.location
+            "date": self.date.isoformat(),
+            "location": self.location,
+            "arrival_time": self.arrival_time.isoformat(),
+            "departure_time": self.departure_time.isoformat(),
+            "user_id": self.user_id,
         }
+
+        return data
 
 class User(BaseModel):
     name: str
