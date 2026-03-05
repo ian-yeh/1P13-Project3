@@ -3,6 +3,7 @@
 .env
 .env.local
 .vscode/
+.idea/
 
 # for frontend stuff
 node_modules/
@@ -26,3 +27,4 @@ dist/
 __pycache__/
 *.py[cod]
 env/
+serviceAccountKey.json
