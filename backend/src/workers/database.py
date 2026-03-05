@@ -13,15 +13,22 @@ class DatabaseWorker:
     def __init__(self):
         self.db = db
 
-    def write_event(self, name, date, location):
+    def write_event(self, event_data: dict):
         new_event = self.db.collection("events").document()
-        new_event.set({
+        new_event.set(event_data)
+
+    def update_event(self, event_id, name=None, date=None, location=None, arrival_time=None, departure_time=None):
+        event_ref = self.db.collection("events").document(event_id)
+        event_ref.update({
             "name": name,
             "date": date,
-            "location": location
+            "location": location,
+            "arrival_time": arrival_time,
+            "departure_time": departure_time
         })
 
-    def update_event(self, event_id, name=None, date=None, location=None):
+    def get_events(self, user_id):
+        #event_ref = self.db.collection("")
         pass
 
     def write_user(self):

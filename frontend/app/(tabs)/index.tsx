@@ -6,6 +6,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { getUser } from '@/api/api';
 import { useUser } from '@/store/useStore';
+import { EventList } from '@/components/homepage/event-list';
 
 //import { Link } from 'expo-router';
 
@@ -94,9 +95,10 @@ export default function HomeScreen() {
 
           </ThemedView>
 
-          <ThemedView style={styles.container}>
+          <View style={styles.container}>
             <ThemedText type="subtitle" style={{ height: 350 }}>Your Scheduled Rides</ThemedText>
-          </ThemedView>
+            <EventList userId={userId}/>
+          </View>
 
 
         </ThemedView>

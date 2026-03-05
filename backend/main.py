@@ -11,16 +11,27 @@ async def root():
 
     return {"message": "Hello World"}
 
-@app.post("/api/schedule")
-async def schedule(event_data: Event):
-    database_worker.write_event(
-        event_data.name, 
-        event_data.date, 
-        event_data.location
+# event routes
+@app.post("/api/create_event")
+async def create_event(event_data: Event):
+    database_worker.write_event(event_data.to_firestore())
+
+    return {"message": "Event created successfully"}
+
+@app.put("/api/update_event/{event_id}")
+async def update_event(event_id: str, event_data: Event):
+    database_worker.update_event(
+        event_id,
+        name=event_data.name,
+        date=event_data.date,
+        location=event_data.location,
+        arrival_time=event_data.arrival_time,
+        departure_time=event_data.departure_time
     )
 
-    return {"message": "Task scheduled successfully"}
+    return {"message": "Event updated successfully"}
 
+# user routes
 @app.post("/api/update_user/{user_id}")
 async def update_user(user_id: str, user_data: User):
     database_worker.update_user(
