@@ -7,12 +7,16 @@ import { ThemedView } from '@/components/themed-view';
 import { getUser } from '@/api/api';
 import { useUser } from '@/store/useStore';
 import { EventList } from '@/components/homepage/event-list';
+import { useNavigation } from '@react-navigation/native';
+import { Link } from 'expo-router';
 
 export default function HomeScreen() {
   const [userId, setUserId] = useState<string | null>('');
   const [showModal, setShowModal] = useState(true);
   const [inputValue, setInputValue] = useState('');
   const name = 'Mark';
+
+  const navigator = useNavigation();
 
   useEffect(() => {
     if (!userId) {
@@ -36,10 +40,6 @@ export default function HomeScreen() {
       setShowModal(false);
     }
   };
-
-  const handleBookManual = () => {
-    Alert.alert("hey")
-  }
 
   return (
 
@@ -87,10 +87,12 @@ export default function HomeScreen() {
                 </ThemedText>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.innercontainer} onPress={handleBookManual}>
-                <ThemedText type="defaultSemiBold" style={styles.buttonText}>
-                  Book Manually
-                </ThemedText>
+              <TouchableOpacity style={styles.innercontainer}>
+                <Link href={"/booking"}>
+                  <ThemedText type="defaultSemiBold" style={styles.buttonText}>
+                    Book Manually
+                  </ThemedText>
+                </Link>
               </TouchableOpacity>
 
             </ThemedView>
