@@ -29,7 +29,7 @@ export default function TabTwoScreen() {
         })
 
         console.log(response)
-        //navigator.goBack();
+        navigator.goBack();
     }
 
     // fetching global user state

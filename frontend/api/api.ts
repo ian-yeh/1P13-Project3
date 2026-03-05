@@ -24,8 +24,8 @@ export function scheduleEvent(eventData: any) {
 
 // get all events attached to a specific user
 // TODO: fetch via specific user, not in total.
-export function getEvents() {
-    return fetch(`${API_BASE_URL}/events`)
+export function getEvents(userId: string) {
+    return fetch(`${API_BASE_URL}/get_events/${userId}`)
         .then(response => response.json())
         .catch(error => console.error('Error fetching events:', error));
 }

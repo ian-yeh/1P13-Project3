@@ -31,6 +31,17 @@ async def update_event(event_id: str, event_data: Event):
 
     return {"message": "Event updated successfully"}
 
+@app.get("/api/get_events/{user_id}")
+async def get_all_events(user_id: str):
+    event_array = database_worker.get_events(user_id)
+    #event_array = [1, 2, 3, 4]
+
+    if not event_array:
+        return {"message": "failed to fetch the events"}
+
+
+    return event_array
+
 # user routes
 @app.post("/api/update_user/{user_id}")
 async def update_user(user_id: str, user_data: User):

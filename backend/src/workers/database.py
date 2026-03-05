@@ -28,8 +28,14 @@ class DatabaseWorker:
         })
 
     def get_events(self, user_id):
-        #event_ref = self.db.collection("")
-        pass
+        events_ref = self.db.collection("events").where("user_id", "==", user_id)
+        events_list = events_ref.get()
+        events = []
+
+        for doc in events_list:
+            events.append(doc.to_dict())
+
+        return events
 
     def write_user(self):
         pass
