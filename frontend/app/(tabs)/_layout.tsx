@@ -42,7 +42,6 @@ export default function TabLayout() {
             </View>),
         }}
       />
-
       <Tabs.Screen
         name="setting"
         options={{

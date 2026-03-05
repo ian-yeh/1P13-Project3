@@ -1,12 +1,13 @@
 // file to handle api calls to the backend
 import { Platform } from "react-native";
 
-// for android people - they use a different port ig
-const API_HOST =
-  Platform.OS === "android"
-    ? "http://10.0.2.2:8000"
-    : "http://127.0.0.1:8000";
+let API_HOST = "http://127.0.0.1:8000";
 
+// for android people - they use a different port ig
+if (Platform.OS === 'android') {
+  API_HOST = "http://10.0.2.2:8000"
+};
+  
 const API_BASE_URL = `${API_HOST}/api`;
 
 export function scheduleEvent(eventData: any) {
@@ -23,8 +24,8 @@ export function scheduleEvent(eventData: any) {
 
 // get all events attached to a specific user
 // TODO: fetch via specific user, not in total.
-export function getEvents() {
-    return fetch(`${API_BASE_URL}/events`)
+export function getEvents(userId: string) {
+    return fetch(`${API_BASE_URL}/get_events/${userId}`)
         .then(response => response.json())
         .catch(error => console.error('Error fetching events:', error));
 }

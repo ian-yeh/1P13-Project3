@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar, TouchableOpacity, Modal, TextInput, View, Text } from 'react-native';
+import { Alert, StyleSheet, StatusBar, TouchableOpacity, Modal, TextInput, View, Text } from 'react-native';
 import { useState, useEffect } from 'react';
 
 import { HelloWave } from '@/components/hello-wave';
@@ -6,11 +6,10 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { getUser } from '@/api/api';
 import { useUser } from '@/store/useStore';
-
-//import { Link } from 'expo-router';
+import { EventList } from '@/components/homepage/event-list';
 
 export default function HomeScreen() {
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState<string | null>('');
   const [showModal, setShowModal] = useState(true);
   const [inputValue, setInputValue] = useState('');
   const name = 'Mark';
@@ -37,6 +36,10 @@ export default function HomeScreen() {
       setShowModal(false);
     }
   };
+
+  const handleBookManual = () => {
+    Alert.alert("hey")
+  }
 
   return (
 
@@ -84,7 +87,7 @@ export default function HomeScreen() {
                 </ThemedText>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.innercontainer} onPress={() => console.log('Button 2 pressed')}              >
+              <TouchableOpacity style={styles.innercontainer} onPress={handleBookManual}>
                 <ThemedText type="defaultSemiBold" style={styles.buttonText}>
                   Book Manually
                 </ThemedText>
@@ -94,9 +97,10 @@ export default function HomeScreen() {
 
           </ThemedView>
 
-          <ThemedView style={styles.container}>
-            <ThemedText type="subtitle" style={{ height: 350 }}>Your Scheduled Rides</ThemedText>
-          </ThemedView>
+          <View style={styles.scheduledRides}>
+            <ThemedText type="subtitle" style={{ marginBottom: 12 }}>Your Scheduled Rides</ThemedText>
+            { userId && <EventList userId={userId}/> }
+          </View>
 
 
         </ThemedView>
@@ -142,7 +146,16 @@ const styles = StyleSheet.create({
     width: 350,
     borderRadius: 20,
     padding: 25,
-    margin: 20,
+    margin: 10,
+  },
+  scheduledRides: {
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#9676E5',
+    width: 350,
+    borderRadius: 20,
+    padding: 25,
+    margin: 10,
   },
   row: {
     flexDirection: 'row',
