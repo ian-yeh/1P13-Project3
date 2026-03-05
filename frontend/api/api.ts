@@ -11,7 +11,7 @@ if (Platform.OS === 'android') {
 const API_BASE_URL = `${API_HOST}/api`;
 
 export function scheduleEvent(eventData: any) {
-    return fetch(`${API_BASE_URL}/schedule`, {
+    return fetch(`${API_BASE_URL}/create_event`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
