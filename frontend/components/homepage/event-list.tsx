@@ -22,7 +22,7 @@ function EventCard({
 
   return (
     <View>
-      <View style={styles.cardContainer}>
+      <View className="py-8 my-4 rounded-lg flex-row border-1 bg-[#fcfbfc] p-8 justify-between" >
         <View>
           <Text style={{ fontWeight: 600, fontSize: 12, marginBottom: 2 }}>{location}</Text>
           <Text style={{ fontSize: 11, color: "#666" }}>Rider: {name}</Text>
@@ -72,18 +72,3 @@ export function EventList({ userId }: EventListProps) {
 }
 
 
-
-const styles = StyleSheet.create({
-  cardContainer: {
-    backgroundColor: '#fcfbfc',
-    paddingVertical: 8,
-    marginVertical: 4,
-    borderRadius: 8,
-    padding: 8,
-    borderColor: '#eeeef5',
-    borderWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-})
