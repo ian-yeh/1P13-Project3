@@ -67,6 +67,7 @@ export function EventList({ userId }: EventListProps) {
         {events.map((item, i) => (
           <View key={i}>
             <EventCard 
+              status={item.status || 'pending'}
               arrivalTime={new Date(item.arrival_time)}
               departureTime={new Date(item.departure_time)}
               name={item.name}
