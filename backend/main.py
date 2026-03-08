@@ -4,6 +4,7 @@ from src.workers.database import DatabaseWorker
 from src.models.core_models import Event, User
 from dotenv import load_dotenv
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 # loading env vars
 load_dotenv()
@@ -15,7 +16,15 @@ OMAR = os.getenv("OMAR")
 app = FastAPI()
 database_worker = DatabaseWorker()
 calling_agent = CallingAgent(SID, TOKEN, TWILIO_NUMBER)
+origins = ["*"]  # allow all (good for development)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 @app.get("/")
 async def root():
 

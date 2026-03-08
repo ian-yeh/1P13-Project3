@@ -12,17 +12,26 @@ interface EventCardProps {
   location: string;
   name: string;
   userId: string;
+  status:string;
 }
 
 function EventCard({
-  arrivalTime, departureTime, location, name, userId
+  arrivalTime, departureTime, location, name, userId,status
 }: EventCardProps) {
 
   console.log(arrivalTime,departureTime)
 
   return (
     <View>
-      <View className="py-8 my-4 rounded-lg flex-row border-1 bg-[#fcfbfc] p-8 justify-between" >
+   <View
+  className={`py-8 my-4 rounded-lg flex-row border p-8 justify-between ${
+    status === "booked"
+      ? "bg-green-400"
+      : status === "canceled"
+      ? "bg-red-400"
+      : "bg-purple-400"
+  }`}
+>
         <View>
           <Text style={{ fontWeight: 600, fontSize: 12, marginBottom: 2 }}>{location}</Text>
           <Text style={{ fontSize: 11, color: "#666" }}>Rider: {name}</Text>
