@@ -2,6 +2,14 @@ import { TouchableOpacity, View, Text, ScrollView } from "react-native";
 import { useState } from "react";
 import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from "expo-speech-recognition";
 
+function parseVoiceCommand(transcript: string) {
+    const command = transcript.toLowerCase();
+
+    if (command.includes("schedule")) {
+        console.log("schedule command")
+    }
+}
+
 const VoicePage = () => {
     const [transcript, setTranscript] = useState("");
     const [isListening, setIsListening] = useState(false);
@@ -27,13 +35,13 @@ const VoicePage = () => {
 
         const result = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
         if (!result.granted) {
-            console.log("Speech recognition permission denied");
+            console.log("speech recognition permission denied");
             return;
         }
 
         const audioResult = await ExpoSpeechRecognitionModule.requestMicrophonePermissionsAsync();
         if (!audioResult.granted) {
-            console.log("Microphone permission denied");
+            console.log("microphone permission denied");
             return;
         }
 
@@ -43,12 +51,15 @@ const VoicePage = () => {
             lang: "en-US",
             interimResults: true,
         });
+
+        parseVoiceCommand(transcript); // parsing keywords from voice command
     };
 
     return (
         <View className="flex-1 bg-[#9676E5]">
-            <View className="mt-[90px] flex-1 bg-[#9676E5] justify-center items-center">
-                <View className="flex-1 bg-[#9676E5] items-center">
+            <View className="mt-[90px] flex-1 bg-[#9676E5] items-center">
+
+                <View className="bg-[#9676E5] items-center mb-8">
                     <Text className="text-white text-3xl font-bold mb-8" style={{ fontFamily: "Rounded" }}>Voice Assistant</Text>
                     <TouchableOpacity
                         onPress={handleSchedule}
@@ -57,6 +68,7 @@ const VoicePage = () => {
                         <Text className="text-base font-bold text-[#453B5F]">Schedule Ride</Text>
                     </TouchableOpacity>
                 </View>
+
                 <View className="w-[350px] bg-white rounded-2xl p-6 mb-10">
                     <Text className="text-lg font-bold text-[#453B5F] mb-3">
                         {isListening ? "Listening..." : "Transcript"}
@@ -67,6 +79,7 @@ const VoicePage = () => {
                         </Text>
                     </ScrollView>
                 </View>
+
             </View>
         </View>
     );
