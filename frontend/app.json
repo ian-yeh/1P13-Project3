@@ -14,7 +14,7 @@
         "NSSpeechRecognitionUsageDescription": "Allow $(PRODUCT_NAME) to use speech recognition.",
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to use the microphone."
       },
-      "bundleIdentifier": "com.anonymous.frontend"
+      "bundleIdentifier": "com.ian.frontend"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,7 +28,7 @@
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.anonymous.frontend"
+      "package": "com.ian.frontend"
     },
     "web": {
       "output": "static",
