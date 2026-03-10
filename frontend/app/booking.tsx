@@ -21,7 +21,8 @@ const BookingPage = () => {
         location: location,
         arrival_time: arrivalTime || "2026-03-05T19:15:11.660Z",
         departure_time: departureTime || "2026-03-05T19:15:11.660Z",
-        user_id: "1"
+        user_id: "1",
+        status: "pending"
       })
 
       console.log(response)
