@@ -30,11 +30,11 @@ export default function HomeScreen() {
 
       // fetch user details
       const response = await getUser(inputValue.trim());
-      useUser.setState({ 
-        userId: inputValue.trim(), 
+      useUser.setState({
+        userId: inputValue.trim(),
         name: response.name,
-        passengerNumber: response.passenger_number, 
-        mobilityDetails: response.mobility_details 
+        passengerNumber: response.passenger_number,
+        mobilityDetails: response.mobility_details
       });
 
       setShowModal(false);
@@ -50,7 +50,7 @@ export default function HomeScreen() {
         visible={showModal}
         transparent={true}
         animationType="fade"
-        onRequestClose={() => {}}
+        onRequestClose={() => { }}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
@@ -82,9 +82,11 @@ export default function HomeScreen() {
             <ThemedView style={styles.row}>
 
               <TouchableOpacity style={styles.innercontainer} onPress={() => console.log('Button 1 pressed')}              >
-                <ThemedText type="defaultSemiBold" style={styles.buttonText}>
-                  Google Assistant
-                </ThemedText>
+                <Link href={"/voice"}>
+                  <ThemedText type="defaultSemiBold" style={styles.buttonText}>
+                    Google Assistant
+                  </ThemedText>
+                </Link>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.innercontainer}>
@@ -101,7 +103,7 @@ export default function HomeScreen() {
 
           <View style={styles.scheduledRides}>
             <ThemedText type="subtitle" style={{ marginBottom: 12 }}>Your Scheduled Rides</ThemedText>
-            { userId && <EventList userId={userId}/> }
+            {userId && <EventList userId={userId} />}
           </View>
 
 

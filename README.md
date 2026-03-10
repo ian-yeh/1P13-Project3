@@ -10,6 +10,11 @@ npx expo start
 # if you wanna do a hard restart of expo, run
 npx expo start --clear
 # to clear the cache
+
+### for the voice feature
+npx expo prebuild
+npx expo run:ios # if IOS
+npx expo run:android # if ur on android studio
 ```
 
 ### Backend
