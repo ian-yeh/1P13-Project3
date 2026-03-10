@@ -5,10 +5,11 @@ let API_HOST = "http://127.0.0.1:8000";
 
 // for android people - they use a different port ig
 if (Platform.OS === 'android') {
-  API_HOST = "http://10.0.2.2:8000"
+    API_HOST = "http://10.0.2.2:8000"
 };
-  
-const API_BASE_URL = `${API_HOST}/api`;
+
+//const API_BASE_URL = `${API_HOST}/api`;
+const API_BASE_URL = process.env.EXPO_PUBLIC_BASE_API_URL;
 
 export function scheduleEvent(eventData: any) {
     return fetch(`${API_BASE_URL}/create_event`, {
@@ -18,12 +19,11 @@ export function scheduleEvent(eventData: any) {
         },
         body: JSON.stringify(eventData)
     })
-    .then(response => response.json())
-    .catch(error => console.error('Error scheduling event:', error));
+        .then(response => response.json())
+        .catch(error => console.error('Error scheduling event:', error));
 }
 
 // get all events attached to a specific user
-// TODO: fetch via specific user, not in total.
 export function getEvents(userId: string) {
     return fetch(`${API_BASE_URL}/get_events/${userId}`)
         .then(response => response.json())
@@ -39,8 +39,8 @@ export function updateUser(userId: string, userData: any) {
         },
         body: JSON.stringify(userData)
     })
-    .then(response => response.json())
-    .catch(error => console.error('Error updating user:', error));
+        .then(response => response.json())
+        .catch(error => console.error('Error updating user:', error));
 }
 
 // fetching user details from db, via user id
