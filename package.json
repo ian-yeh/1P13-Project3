@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "@react-native-google-signin/google-signin": "^16.1.2",
+    "expo": "^55.0.5",
+    "react-native-calendars": "^1.1314.0",
     "react-native-webview": "^13.16.1"
   }
 }
