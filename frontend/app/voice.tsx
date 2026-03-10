@@ -25,8 +25,14 @@ const VoicePage = () => {
             return;
         }
 
-        const { granted } = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
-        if (!granted) {
+        const result = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
+        if (!result.granted) {
+            console.log("Speech recognition permission denied");
+            return;
+        }
+
+        const audioResult = await ExpoSpeechRecognitionModule.requestMicrophonePermissionsAsync();
+        if (!audioResult.granted) {
             console.log("Microphone permission denied");
             return;
         }
@@ -52,10 +58,12 @@ const VoicePage = () => {
                     </TouchableOpacity>
                 </View>
                 <View className="w-[350px] bg-white rounded-2xl p-6 mb-10">
-                    <Text className="text-lg font-bold text-[#453B5F] mb-3">Transcript</Text>
+                    <Text className="text-lg font-bold text-[#453B5F] mb-3">
+                        {isListening ? "Listening..." : "Transcript"}
+                    </Text>
                     <ScrollView className="max-h-[200px]">
                         <Text className="text-base text-[#453B5F]">
-                            {transcript || (isListening ? "Listening..." : "Press 'Schedule Ride' and start speaking")}
+                            {transcript}
                         </Text>
                     </ScrollView>
                 </View>
