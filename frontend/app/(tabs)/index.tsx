@@ -1,9 +1,7 @@
-import { Alert, StyleSheet, StatusBar, TouchableOpacity, Modal, TextInput, View, Text } from 'react-native';
+import { StyleSheet, StatusBar, TouchableOpacity, Modal, TextInput, View, Text } from 'react-native';
 import { useState, useEffect } from 'react';
 
 import { HelloWave } from '@/components/hello-wave';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { getUser } from '@/api/api';
 import { useUser } from '@/store/useStore';
 import { EventList } from '@/components/homepage/event-list';
@@ -43,7 +41,7 @@ export default function HomeScreen() {
 
   return (
 
-    <ThemedView style={styles.background}>
+    <View style={styles.background}>
 
       {/** This mdodal is to set the user id */}
       <Modal
@@ -70,49 +68,49 @@ export default function HomeScreen() {
         </View>
       </Modal>
 
-      <ThemedView style={styles.topbox}>
-        <ThemedView style={{ flex: 1, backgroundColor: '#9676E5', justifyContent: 'flex-start', alignItems: 'center' }}>
-          <ThemedView style={styles.titleContainer}>
-            <ThemedText type="title" style={styles.title}>Welcome {name}!</ThemedText>
+      <View style={styles.topbox}>
+        <View style={{ flex: 1, backgroundColor: '#9676E5', justifyContent: 'flex-start', alignItems: 'center' }}>
+          <View style={styles.titleContainer}>
+            <Text className="text-white text-3xl font-semibold">Welcome {name}!</Text>
             <HelloWave />
-          </ThemedView>
+          </View>
 
-          <ThemedView style={styles.container}>
-            <ThemedText type="subtitle">Organize a ride.</ThemedText>
-            <ThemedView style={styles.row}>
+          <View style={styles.container}>
+            <Text className="text-xl font-semibold">Organize a ride.</Text>
+            <View style={styles.row}>
 
               <TouchableOpacity style={styles.innercontainer} onPress={() => console.log('Button 1 pressed')}              >
                 <Link href={"/voice"}>
-                  <ThemedText type="defaultSemiBold" style={styles.buttonText}>
+                  <Text className="font-semibold" style={styles.buttonText}>
                     Google Assistant
-                  </ThemedText>
+                  </Text>
                 </Link>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.innercontainer}>
                 <Link href={"/booking"}>
-                  <ThemedText type="defaultSemiBold" style={styles.buttonText}>
+                  <Text className="font-semibold" style={styles.buttonText}>
                     Book Manually
-                  </ThemedText>
+                  </Text>
                 </Link>
               </TouchableOpacity>
 
-            </ThemedView>
+            </View>
 
-          </ThemedView>
+          </View>
 
           <View style={styles.scheduledRides}>
-            <ThemedText type="subtitle" style={{ marginBottom: 12 }}>Your Scheduled Rides</ThemedText>
+            <Text className="text-black text-xl font-semibold" style={{ marginBottom: 12 }}>Your Scheduled Rides</Text>
             {userId && <EventList userId={userId} />}
           </View>
 
 
-        </ThemedView>
+        </View>
 
 
 
-      </ThemedView>
-    </ThemedView>
+      </View>
+    </View>
 
   );
 }

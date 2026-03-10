@@ -11,6 +11,7 @@ class Event(BaseModel):
     arrival_time: datetime
     departure_time: datetime
     user_id: str
+    status: str
 
     def to_firestore(self):
         data = {
@@ -20,6 +21,7 @@ class Event(BaseModel):
             "arrival_time": self.arrival_time.isoformat(),
             "departure_time": self.departure_time.isoformat(),
             "user_id": self.user_id,
+            "status": self.status
         }
 
         return data

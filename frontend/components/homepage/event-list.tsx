@@ -12,34 +12,39 @@ interface EventCardProps {
   location: string;
   name: string;
   userId: string;
-  status:string;
+  status: string;
 }
 
 function EventCard({
-  arrivalTime, departureTime, location, name, userId,status
+  arrivalTime, departureTime, location, name, userId, status
 }: EventCardProps) {
 
-  console.log(arrivalTime,departureTime)
+  console.log(arrivalTime, departureTime)
+  console.log(status)
 
   return (
     <View>
-   <View
-  className={`py-8 my-4 rounded-lg flex-row border p-8 justify-between ${
-    status === "booked"
-      ? "bg-green-400"
-      : status === "canceled"
-      ? "bg-red-400"
-      : "bg-purple-400"
-  }`}
->
+      <View
+        className={`py-4 px-4 my-4 rounded-lg border justify-between`}
+      >
         <View>
-          <Text style={{ fontWeight: 600, fontSize: 12, marginBottom: 2 }}>{location}</Text>
-          <Text style={{ fontSize: 11, color: "#666" }}>Rider: {name}</Text>
+          <Text className="text-lg font-semibold mb-4">{location}</Text>
         </View>
-        <View style={{ }}>
-          <Text style={{ fontSize: 10 }}>Departure {departureTime.toDateString()}</Text>
-          <Text style={{ fontSize: 10 }}>Arrival: {arrivalTime.toDateString()}</Text>
+        <View className="flex-1 flex-row items-center gap-8 justify-between">
+          <View>
+            <Text className="text-xs font-semibold mb-1 text-gray-600">Departure</Text>
+            <Text className="text-sm">{departureTime.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</Text>
+            <Text className="text-sm">{departureTime.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "EST" })}</Text>
+          </View>
+          <View>
+            <Text className="text-xs font-semibold mb-1 text-gray-600">Arrival</Text>
+            <Text className="text-sm">{arrivalTime.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</Text>
+            <Text className="text-sm">{arrivalTime.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "EST" })}</Text>
+          </View>
         </View>
+        <Text className="text-sm font-semibold mt-4">Status: <Text
+          className={`${status === "pending" ? "text-purple-400" : status === "cancelled" ? "text-red-400" : "text-green-400"}`}
+        >{status}</Text></Text>
       </View>
     </View>
   )
@@ -60,13 +65,13 @@ export function EventList({ userId }: EventListProps) {
     fetchData();
 
   }, [userId])
- 
+
   return (
     <View>
       <ScrollView>
         {events.map((item, i) => (
           <View key={i}>
-            <EventCard 
+            <EventCard
               status={item.status || 'pending'}
               arrivalTime={new Date(item.arrival_time)}
               departureTime={new Date(item.departure_time)}
@@ -75,7 +80,7 @@ export function EventList({ userId }: EventListProps) {
               userId={item.userId}
             />
           </View>
-        ))}  
+        ))}
       </ScrollView>
     </View>
   );

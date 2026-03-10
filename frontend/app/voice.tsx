@@ -60,7 +60,7 @@ const VoicePage = () => {
             <View className="mt-[90px] flex-1 bg-[#9676E5] items-center">
 
                 <View className="bg-[#9676E5] items-center mb-8">
-                    <Text className="text-white text-3xl font-bold mb-8" style={{ fontFamily: "Rounded" }}>Voice Assistant</Text>
+                    <Text className="text-white text-3xl font-bold mb-8">Voice Assistant</Text>
                     <TouchableOpacity
                         onPress={handleSchedule}
                         className="bg-[#CDD3EF] py-3.5 px-8 rounded-lg items-center justify-center"
