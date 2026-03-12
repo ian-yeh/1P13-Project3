@@ -11,7 +11,7 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Fonts } from '@/constants/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HelloWave } from '@/components/hello-wave';
-import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { Calendar } from 'react-native-calendars';
 import { useState } from 'react';
@@ -88,10 +88,10 @@ export default function TabTwoScreen() {
 
   useEffect(() => {
     (async () => {
-      const token = await signIn();               // ask the user to log in
+      const token = await signIn();
       if (token) {
-        const ev = await fetchCalendarEvents(token);  // fetch their events
-        setEvents(ev);                            // update state
+        const ev = await fetchCalendarEvents(token);
+        setEvents(ev);
       }
     })();
   }, []);
@@ -108,7 +108,6 @@ export default function TabTwoScreen() {
 
         <ThemedView style={styles.container}>
           <Calendar
-            // This styles the calendar to match your app's brand
             theme={{
               calendarBackground: '#ffffff',
               textSectionTitleColor: '#9676E5',
@@ -116,7 +115,6 @@ export default function TabTwoScreen() {
               todayTextColor: '#9676E5',
               arrowColor: '#9676E5',
             }}
-            // Pass in the data we fetched from the API
             markedDates={events}
           />
         </ThemedView>
