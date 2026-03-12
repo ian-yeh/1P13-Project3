@@ -22,10 +22,10 @@ export default function TabTwoScreen() {
     const handleSave = async () => {
         console.log('Settings saved:', { name, passengerNumber, mobilityDetails, userId });
         const response = await updateUser(userId, {
-          name: name,
-          passenger_number: passengerNumber,
-          mobility_details: mobilityDetails,
-          user_id: userId
+            name: name,
+            passenger_number: passengerNumber,
+            mobility_details: mobilityDetails,
+            user_id: userId
         })
 
         console.log(response)

@@ -1,131 +1,102 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet, StatusBar } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
 
-import { Collapsible } from '@/components/ui/collapsible';
-import { ExternalLink } from '@/components/external-link';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Fonts } from '@/constants/theme';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { HelloWave } from '@/components/hello-wave';
+import { useState, useEffect } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
-import { Calendar } from 'react-native-calendars';
-import { useState } from 'react';
-import { useEffect } from 'react';
 
+interface BackendEvent {
+  name: string;
+  date: string;
+  location?: string;
+  arrival_time?: string;
+  departure_time?: string;
+}
 
+async function insertIntoGoogleCalendar(token: string, ev: BackendEvent) {
+  const start = `${ev.date}T${ev.arrival_time ?? "00:00"}:00`;
+  const end = `${ev.date}T${ev.departure_time ?? "23:59"}:00`;
+
+  await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      summary: ev.name,
+      location: ev.location,
+      start: { dateTime: start },
+      end: { dateTime: end },
+    }),
+  });
+}
+
+async function syncBackendEvents(token: string, userId: string) {
+  const r = await fetch(`https://your-backend.example.com/events/${userId}`);
+  const list: BackendEvent[] = await r.json();
+  for (const ev of list) {
+    try {
+      await insertIntoGoogleCalendar(token, ev);
+    } catch (err) {
+      console.warn("failed to insert event", ev, err);
+    }
+  }
+}
 
 GoogleSignin.configure({
   webClientId: '48917778841-pkre4vjbug3u4i3vrveok241jocfj9m3.apps.googleusercontent.com',
-  scopes: ['https://www.googleapis.com/auth/calendar.readonly'],
+  scopes: ['https://www.googleapis.com/auth/calendar'],
 });
 
-const signIn = async () => {
+const signIn = async (): Promise<string | null> => {
   try {
     await GoogleSignin.hasPlayServices();
-
-
     const response = await GoogleSignin.signIn();
-    if (response.type === 'success') {
+    if (response) {
       const tokens = await GoogleSignin.getTokens();
-      console.log("Access Token:", tokens.accessToken);
+      console.log('Access Token:', tokens.accessToken);
       return tokens.accessToken;
-    } else {
-      console.log("Sign in was cancelled or is already in progress");
     }
   } catch (error) {
-    console.error("Detailed Login Error:", error);
+    console.error('Detailed Login Error:', error);
   }
+  return null;
 };
-
-interface GoogleCalendarEvent {
-  start: {
-    date?: string;
-    dateTime?: string;
-  };
-  summary?: string;
-}
-
-interface FormattedEvents {
-  [date: string]: {
-    marked: boolean;
-    dotColor: string;
-  };
-}
-
-const fetchCalendarEvents = async (accessToken: string): Promise<FormattedEvents> => {
-  const response = await fetch(
-    'https://www.googleapis.com/calendar/v3/calendars/primary/events',
-    {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    }
-  );
-
-  const data = await response.json();
-
-  const formattedEvents: FormattedEvents = {};
-
-  if (data.items) {
-    data.items.forEach((event: GoogleCalendarEvent) => {
-      const date = event.start.date || event.start.dateTime?.split('T')[0];
-      if (date) {
-        formattedEvents[date] = { marked: true, dotColor: '#9676E5' };
-      }
-    });
-  }
-
-  return formattedEvents;
-};
-
-
 
 export default function TabTwoScreen() {
-  const [events, setEvents] = useState<FormattedEvents>({});
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
-      const token = await signIn();
-      if (token) {
-        const ev = await fetchCalendarEvents(token);
-        setEvents(ev);
+      const t = await signIn();
+      if (t) {
+        setToken(t);
+        await syncBackendEvents(t, "1");
       }
     })();
   }, []);
 
   return (
-
     <ThemedView style={styles.background}>
-
-      <SafeAreaView >
-        <ThemedText type="title" style={styles.headerText}>Calendar</ThemedText>
-      </SafeAreaView>
+      <ThemedText type="title" style={styles.headerText}>Calendar</ThemedText>
 
       <ThemedView style={styles.topbox}>
-
         <ThemedView style={styles.container}>
-          <Calendar
-            theme={{
-              calendarBackground: '#ffffff',
-              textSectionTitleColor: '#9676E5',
-              selectedDayBackgroundColor: '#9676E5',
-              todayTextColor: '#9676E5',
-              arrowColor: '#9676E5',
-            }}
-            markedDates={events}
+          <WebView
+            userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36"
+            style={styles.webview}
+            source={{ uri: 'https://calendar.google.com/calendar/embed?src=351ee7846ff13923dc09b40377d0e5e0a731cc2f7c5c99113c343d4154000170%40group.calendar.google.com&ctz=America%2FToronto' }}
           />
         </ThemedView>
 
-
       </ThemedView>
-
-
     </ThemedView>
-
   );
+
 }
 
 const styles = StyleSheet.create({
@@ -147,6 +118,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.rounded,
     textAlign: 'center',
     color: '#ffffff',
+    marginTop: '10%',
     fontSize: 60,
     padding: 20,
     height: 100,
