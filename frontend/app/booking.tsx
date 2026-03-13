@@ -2,20 +2,19 @@ import { useUser } from "@/store/useStore"
 import { View, Text, TextInput, TouchableOpacity } from "react-native"
 import { scheduleEvent } from "@/api/api";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useRef } from "react";
-import { DatePicker } from "@s77rt/react-native-date-picker";
-import type { DatePickerHandle } from "@s77rt/react-native-date-picker";
+import { useState } from "react";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 
 const BookingPage = () => {
-  const departurePickerRef = useRef<DatePickerHandle>(null);
-  const arrivalPickerRef = useRef<DatePickerHandle>(null);
   const navigator = useNavigation();
   const userData: any = useUser.getState();
 
   const [location, setLocation] = useState('');
   const [arrivalTime, setArrivalTime] = useState<Date | null>(null)
   const [departureTime, setDepartureTime] = useState<Date | null>(null)
+  const [showDeparturePicker, setShowDeparturePicker] = useState(false)
+  const [showArrivalPicker, setShowArrivalPicker] = useState(false)
 
   const handleBook = async () => {
     const response = await scheduleEvent({
@@ -34,58 +33,69 @@ const BookingPage = () => {
   }
 
   return (
-    <View className="bg-white h-full px-4 py-8 flex-1 items-center">
-      <View className="max-w-[400px]">
-        <Text className="text-black font-bold text-3xl">Book your ride, {userData.name}.</Text>
+    <View className="flex-1 items-center pt-[90px]" style={{ backgroundColor: '#9676E5' }}>
+      <View className="bg-white rounded-2xl p-6 w-[350px] border" style={{ borderColor: '#9676E5' }}>
+        <Text className="font-bold text-3xl mb-2">Book your ride, {userData.name}.</Text>
 
         <View>
-          <Text className="mt-4 text-lg font-semibold">Enter Destination</Text>
+          <Text className="mt-4 text-base font-semibold" style={{ color: '#453B5F' }}>Enter Destination</Text>
           <TextInput
             value={location}
             onChangeText={setLocation}
-            className="border-2 border-gray-200 p-2 mt-1 rounded-lg"
+            className="border rounded-lg p-3 mt-1.5 text-base"
+            placeholderTextColor="#9676E5"
           />
         </View>
 
         <View>
-          <Text className="mt-4 font-semibold text-lg">Departure Time</Text>
+          <Text className="mt-4 text-base font-semibold" style={{ color: '#453B5F' }}>Departure Time</Text>
 
           <TouchableOpacity
-            className="border-2 border-gray-200 p-2 mt-1 rounded-lg"
-            onPress={() => departurePickerRef.current?.showPicker()}
+            className="border rounded-lg p-3 mt-1.5"
+            onPress={() => setShowDeparturePicker(true)}
           >
-            <Text>{departureTime ? departureTime.toString() : "Select date"}</Text>
+            <Text style={{ color: departureTime ? '#453B5F' : '#9676E5' }}>{departureTime ? departureTime.toLocaleString([], { dateStyle: "medium", timeStyle: "short" }) : "Select date"}</Text>
           </TouchableOpacity>
 
-          <DatePicker
-            ref={departurePickerRef}
-            type="datetime"
-            value={departureTime}
-            onChange={setDepartureTime}
-          />
+          {showDeparturePicker && (
+            <DateTimePicker
+              value={departureTime ?? new Date()}
+              mode="datetime"
+              display="spinner"
+              onChange={(event, selectedDate) => {
+                setShowDeparturePicker(false)
+                if (selectedDate) setDepartureTime(selectedDate)
+              }}
+            />
+          )}
         </View>
 
         <View>
-          <Text className="mt-4 font-semibold text-lg">Arrival Time</Text>
+          <Text className="mt-4 text-base font-semibold" style={{ color: '#453B5F' }}>Arrival Time</Text>
 
           <TouchableOpacity
-            className="border-2 border-gray-200 p-2 mt-1 rounded-lg"
-            onPress={() => arrivalPickerRef.current?.showPicker()}
+            className="border rounded-lg p-3 mt-1.5"
+            onPress={() => setShowArrivalPicker(true)}
           >
-            <Text>{arrivalTime ? arrivalTime.toString() : "Select date"}</Text>
+            <Text style={{ color: arrivalTime ? '#453B5F' : '#9676E5' }}>{arrivalTime ? arrivalTime.toLocaleString([], { dateStyle: "medium", timeStyle: "short" }) : "Select date"}</Text>
           </TouchableOpacity>
 
-          <DatePicker
-            ref={arrivalPickerRef}
-            type="datetime"
-            value={arrivalTime}
-            onChange={setArrivalTime}
-          />
+          {showArrivalPicker && (
+            <DateTimePicker
+              value={arrivalTime ?? new Date()}
+              mode="datetime"
+              display="spinner"
+              onChange={(event, selectedDate) => {
+                setShowArrivalPicker(false)
+                if (selectedDate) setArrivalTime(selectedDate)
+              }}
+            />
+          )}
         </View>
 
-        <View className="flex-1 items-center">
-          <TouchableOpacity className="flex items-center p-2 bg-blue-200 w-36 mt-8 rounded-lg" onPress={handleBook}>
-            <Text>Book ride</Text>
+        <View className="items-center">
+          <TouchableOpacity className="rounded-lg mt-6 items-center py-3 px-8 w-40" style={{ backgroundColor: '#9676E5' }} onPress={handleBook}>
+            <Text className="text-white text-base font-bold">Book ride</Text>
           </TouchableOpacity>
         </View>
       </View>
