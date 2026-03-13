@@ -11,117 +11,21 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Fonts } from '@/constants/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HelloWave } from '@/components/hello-wave';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-
-import { Calendar } from 'react-native-calendars';
-import { useState } from 'react';
-import { useEffect } from 'react';
-
-
-
-GoogleSignin.configure({
-  webClientId: '48917778841-pkre4vjbug3u4i3vrveok241jocfj9m3.apps.googleusercontent.com',
-  scopes: ['https://www.googleapis.com/auth/calendar.readonly'],
-});
-
-const signIn = async () => {
-  try {
-    await GoogleSignin.hasPlayServices();
-
-
-    const response = await GoogleSignin.signIn();
-    if (response.type === 'success') {
-      const tokens = await GoogleSignin.getTokens();
-      console.log("Access Token:", tokens.accessToken);
-      return tokens.accessToken;
-    } else {
-      console.log("Sign in was cancelled or is already in progress");
-    }
-  } catch (error) {
-    console.error("Detailed Login Error:", error);
-  }
-};
-
-interface GoogleCalendarEvent {
-  start: {
-    date?: string;
-    dateTime?: string;
-  };
-  summary?: string;
-}
-
-interface FormattedEvents {
-  [date: string]: {
-    marked: boolean;
-    dotColor: string;
-  };
-}
-
-const fetchCalendarEvents = async (accessToken: string): Promise<FormattedEvents> => {
-  const response = await fetch(
-    'https://www.googleapis.com/calendar/v3/calendars/primary/events',
-    {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    }
-  );
-
-  const data = await response.json();
-
-  const formattedEvents: FormattedEvents = {};
-
-  if (data.items) {
-    data.items.forEach((event: GoogleCalendarEvent) => {
-      const date = event.start.date || event.start.dateTime?.split('T')[0];
-      if (date) {
-        formattedEvents[date] = { marked: true, dotColor: '#9676E5' };
-      }
-    });
-  }
-
-  return formattedEvents;
-};
-
-
 
 export default function TabTwoScreen() {
-  const [events, setEvents] = useState<FormattedEvents>({});
-
-  useEffect(() => {
-    (async () => {
-      const token = await signIn();
-      if (token) {
-        const ev = await fetchCalendarEvents(token);
-        setEvents(ev);
-      }
-    })();
-  }, []);
-
   return (
-
     <ThemedView style={styles.background}>
-
-      <SafeAreaView >
-        <ThemedText type="title" style={styles.headerText}>Calendar</ThemedText>
-      </SafeAreaView>
+      <ThemedText type="title" style={styles.headerText}>Calendar</ThemedText>
 
       <ThemedView style={styles.topbox}>
-
         <ThemedView style={styles.container}>
-          <Calendar
-            theme={{
-              calendarBackground: '#ffffff',
-              textSectionTitleColor: '#9676E5',
-              selectedDayBackgroundColor: '#9676E5',
-              todayTextColor: '#9676E5',
-              arrowColor: '#9676E5',
-            }}
-            markedDates={events}
+          <WebView
+            userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36"
+            style={styles.webview}
+            source={{ uri: 'https://calendar.google.com/calendar/embed?src=351ee7846ff13923dc09b40377d0e5e0a731cc2f7c5c99113c343d4154000170%40group.calendar.google.com&ctz=America%2FToronto' }}
           />
         </ThemedView>
-
-
       </ThemedView>
-
 
     </ThemedView>
 
@@ -134,10 +38,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#9676E5',
     color: "9676E5",
   },
+  titleContainer: {
+    flexDirection: 'row',
+    gap: 8,
+  },
   container: {
     backgroundColor: '#ffffff',
-    height: '70%',
-    width: '80%',
+    height: 500,
+    width: 350,
     borderRadius: 20,
     overflow: 'hidden',
     borderWidth: 1,
@@ -147,12 +55,13 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.rounded,
     textAlign: 'center',
     color: '#ffffff',
-    fontSize: 60,
-    padding: 20,
-    height: 100,
+    fontSize: 44,
+    marginTop: 80
   },
   topbox: {
+    marginTop: 40,
     backgroundColor: '#9676E5',
+    flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },

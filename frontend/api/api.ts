@@ -2,6 +2,7 @@
 import { Platform } from "react-native";
 
 let isDev = process.env.DEV_MODE;
+console.log("Developer Mode", isDev);
 let API_HOST = "http://127.0.0.1:8000";
 
 // for android people - they use a different port ig
