@@ -1,14 +1,7 @@
 import { TouchableOpacity, View, Text, ScrollView } from "react-native";
 import { useState } from "react";
 import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from "expo-speech-recognition";
-
-function parseVoiceCommand(transcript: string) {
-    const command = transcript.toLowerCase();
-
-    if (command.includes("schedule")) {
-        console.log("schedule command")
-    }
-}
+import { parseVoiceCommand } from "@/utils/voice-action";
 
 const VoicePage = () => {
     const [transcript, setTranscript] = useState("");
