@@ -6,6 +6,7 @@ import { ThemedView } from '@/components/themed-view';
 import { Fonts } from '@/constants/theme';
 import { useState, useEffect } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { getEvents } from '@/api/api';
 
 
 interface BackendEvent {
@@ -36,12 +37,13 @@ async function insertIntoGoogleCalendar(token: string, ev: BackendEvent) {
 }
 
 async function syncBackendEvents(token: string, userId: string) {
-  const r = await fetch(`https://your-backend.example.com/events/${userId}`);
+  const r = await getEvents(userId);
   const list: BackendEvent[] = await r.json();
   for (const ev of list) {
     try {
       await insertIntoGoogleCalendar(token, ev);
     } catch (err) {
+      ``
       console.warn("failed to insert event", ev, err);
     }
   }
@@ -49,7 +51,11 @@ async function syncBackendEvents(token: string, userId: string) {
 
 GoogleSignin.configure({
   webClientId: '48917778841-pkre4vjbug3u4i3vrveok241jocfj9m3.apps.googleusercontent.com',
-  scopes: ['https://www.googleapis.com/auth/calendar'],
+  scopes: ['https://www.googleapis.com/auth/calendar.events',
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'openid'
+  ],
 });
 
 const signIn = async (): Promise<string | null> => {

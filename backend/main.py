@@ -5,8 +5,6 @@ from src.models.core_models import Event, User
 from dotenv import load_dotenv
 import os
 from fastapi.middleware.cors import CORSMiddleware
-from src.workers.database import DatabaseWorker
-
 
 # loading env vars
 load_dotenv()
@@ -19,8 +17,6 @@ app = FastAPI()
 database_worker = DatabaseWorker()
 calling_agent = CallingAgent(SID, TOKEN, TWILIO_NUMBER)
 origins = ["*"]  # allow all (good for development)
-db_worker = DatabaseWorker()
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -91,8 +87,3 @@ async def get_user(user_id: str):
         return user
     else:
         return {"message": "User not found"}, 404
-    
-@app.get("/events/{user_id}")
-def read_events(user_id: str):
-    """Return all events for a given user."""
-    return db_worker.get_events(user_id)
