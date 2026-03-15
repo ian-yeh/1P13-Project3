@@ -31,3 +31,7 @@ serviceAccountKey.json
 
 #google calendar api
 client_secrets.json 
+
+
+#android/local.properties
+android/local.properties
