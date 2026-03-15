@@ -1,11 +1,8 @@
 import { StyleSheet, StatusBar, TouchableOpacity, Modal, TextInput, View, Text } from 'react-native';
 import { useState, useEffect } from 'react';
-
-import { HelloWave } from '@/components/hello-wave';
 import { getUser } from '@/api/api';
 import { useUser } from '@/store/useStore';
 import { EventList } from '@/components/homepage/event-list';
-import { useNavigation } from '@react-navigation/native';
 import { Link } from 'expo-router';
 
 export default function HomeScreen() {
@@ -13,8 +10,6 @@ export default function HomeScreen() {
   const [showModal, setShowModal] = useState(true);
   const [inputValue, setInputValue] = useState('');
   const name = 'Mark';
-
-  const navigator = useNavigation();
 
   useEffect(() => {
     if (!userId) {
@@ -69,32 +64,30 @@ export default function HomeScreen() {
       </Modal>
 
       <View style={styles.topbox}>
-        <View style={{ flex: 1, backgroundColor: '#9676E5', justifyContent: 'flex-start', alignItems: 'center' }}>
+        <View style={{ flex: 1, backgroundColor: '#9676E5', justifyContent: 'flex-start' }}>
           <View style={styles.titleContainer}>
-            <Text className="text-white text-3xl font-semibold">Welcome {name}!</Text>
-            <HelloWave />
+            <Text className="text-white text-3xl font-semibold mb-4 px-4">DARTS Transportation App</Text>
           </View>
 
           <View style={styles.container}>
-            <Text className="text-xl font-semibold">Organize a ride.</Text>
-            <View style={styles.row}>
-
-              <TouchableOpacity style={styles.innercontainer} onPress={() => console.log('Button 1 pressed')}              >
-                <Link href={"/voice"}>
-                  <Text className="font-semibold" style={styles.buttonText}>
-                    Google Assistant
-                  </Text>
-                </Link>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.innercontainer}>
-                <Link href={"/booking"}>
-                  <Text className="font-semibold" style={styles.buttonText}>
-                    Book Manually
-                  </Text>
-                </Link>
-              </TouchableOpacity>
-
+            <Text className="text-xl font-semibold">Book a Ride</Text>
+            <View className="flex-row gap-3 mt-4">
+              <Link
+                href={"/voice"}
+                className="flex-1 bg-[#CDD3EF] p-3 rounded-lg overflow-hidden text-center"
+              >
+                <Text className="font-semibold text-base text-[#453B5F]">
+                  Voice Assistant
+                </Text>
+              </Link>
+              <Link
+                href={"/booking"}
+                className="flex-1 bg-[#CDD3EF] p-3 rounded-lg overflow-hidden text-center"
+              >
+                <Text className="font-semibold text-base text-[#453B5F]">
+                  Book Manually
+                </Text>
+              </Link>
             </View>
 
           </View>
@@ -147,10 +140,11 @@ const styles = StyleSheet.create({
     borderColor: '#9676E5',
     width: 350,
     borderRadius: 20,
-    padding: 25,
+    padding: 24,
     margin: 10,
   },
   scheduledRides: {
+    flex: 1,
     backgroundColor: '#ffffff',
     borderWidth: 1,
     borderColor: '#9676E5',
@@ -158,6 +152,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 25,
     margin: 10,
+    marginBottom: 40,
   },
   row: {
     flexDirection: 'row',

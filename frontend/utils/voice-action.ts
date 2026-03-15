@@ -96,7 +96,8 @@ export function parseVoiceCommand(transcript: string): ScheduleEvent | null {
     for (let i = 0; i < words.length; i++) {
         const word = words[i];
 
-        // determine which section the current word should activate based on keywords
+        // find which descriptor the current word should activate based on keywords 
+        // --> could add more generalized keywords or move to a different method cuz rn it don't work too well
         if (word === "to" || (word === "at" && section === "none")) section = "location";
         else if (word === "leaving" || word === "departing" || word === "depart" || word === "leave") section = "departure";
         else if (word === "arriving" || word === "arrive") section = "arrival";

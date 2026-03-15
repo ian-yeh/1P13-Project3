@@ -1,6 +1,7 @@
 import { getEvents } from "@/api/api";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ScrollView, Text, View, StyleSheet } from "react-native";
+import { useFocusEffect } from "expo-router";
 
 interface EventListProps {
   userId: string
@@ -25,21 +26,21 @@ function EventCard({
   return (
     <View>
       <View
-        className={`py-4 px-4 my-4 rounded-lg border justify-between`}
+        className={`py-4 px-4 my-4 rounded-lg border justify-between border-gray-300`}
       >
         <View>
           <Text className="text-lg font-semibold mb-4">{location}</Text>
         </View>
-        <View className="flex-1 flex-row items-center gap-8 justify-between">
+        <View className="flex-1 flex-row items-center grid grid-cols-2 gap-8 w-full">
           <View>
-            <Text className="text-xs font-semibold mb-1 text-gray-600">Departure</Text>
-            <Text className="text-sm">{departureTime.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</Text>
-            <Text className="text-sm">{departureTime.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "EST" })}</Text>
+            <Text className="text-sm font-semibold mb-1 text-gray-600">Departure</Text>
+            <Text className="text-lg">{departureTime.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</Text>
+            <Text className="text-lg">{departureTime.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "EST" })}</Text>
           </View>
           <View>
-            <Text className="text-xs font-semibold mb-1 text-gray-600">Arrival</Text>
-            <Text className="text-sm">{arrivalTime.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</Text>
-            <Text className="text-sm">{arrivalTime.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "EST" })}</Text>
+            <Text className="text-sm font-semibold mb-1 text-gray-600">Arrival</Text>
+            <Text className="text-lg">{arrivalTime.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</Text>
+            <Text className="text-lg">{arrivalTime.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "EST" })}</Text>
           </View>
         </View>
         <Text className="text-sm font-semibold mt-4">Status: <Text
@@ -53,34 +54,48 @@ function EventCard({
 export function EventList({ userId }: EventListProps) {
   const [events, setEvents] = useState<any[]>([])
 
-  useEffect(() => {
-    async function fetchData() {
-      let id = "1"
-      if (userId) id = userId
-      const response: any[] = await getEvents(id);
-      setEvents(response)
-      console.log(events)
-    }
+  useFocusEffect(
+    // using a useCallback hook because it's required for useFocusEffect --> basically only runs when the component is in view
+    useCallback(() => {
+      async function fetchData() {
+        if (!userId) {
+          console.log("No userId provided to EventList, skipping fetch");
+          return;
+        }
+        try {
+          console.log("Fetching events for userId:", userId);
+          const response: any[] = await getEvents(userId);
+          console.log("Fetched events data:", response);
+          setEvents(response || []);
+        } catch (error) {
+          console.error("Error fetching events:", error);
+          setEvents([]);
+        }
+      }
 
-    fetchData();
-
-  }, [userId])
+      fetchData();
+    }, [userId])
+  );
 
   return (
-    <View>
-      <ScrollView>
-        {events.map((item, i) => (
-          <View key={i}>
-            <EventCard
-              status={item.status || 'pending'}
-              arrivalTime={new Date(item.arrival_time)}
-              departureTime={new Date(item.departure_time)}
-              name={item.name}
-              location={item.location}
-              userId={item.userId}
-            />
-          </View>
-        ))}
+    <View className="flex-1 w-full">
+      <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
+        {events && events.length > 0 ? (
+          events.map((item, i) => (
+            <View key={i}>
+              <EventCard
+                status={item.status || 'pending'}
+                arrivalTime={new Date(item.arrival_time || item.arrivalTime)}
+                departureTime={new Date(item.departure_time || item.departureTime)}
+                name={item.name}
+                location={item.location}
+                userId={item.userId || item.user_id}
+              />
+            </View>
+          ))
+        ) : (
+          <Text className="text-center text-gray-500 mt-10">No events found.</Text>
+        )}
       </ScrollView>
     </View>
   );

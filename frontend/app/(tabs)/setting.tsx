@@ -1,14 +1,6 @@
-import { StyleSheet, View, StatusBar, TextInput, TouchableOpacity, Text } from 'react-native';
+import { View, StatusBar, TextInput, TouchableOpacity, Text, SafeAreaView } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-
-import { Fonts } from '@/constants/theme';
-
 import { useUser } from '@/store/useStore';
 import { updateUser } from '@/api/api';
 
@@ -22,10 +14,10 @@ export default function TabTwoScreen() {
     const handleSave = async () => {
         console.log('Settings saved:', { name, passengerNumber, mobilityDetails, userId });
         const response = await updateUser(userId, {
-          name: name,
-          passenger_number: passengerNumber,
-          mobility_details: mobilityDetails,
-          user_id: userId
+            name: name,
+            passenger_number: passengerNumber,
+            mobility_details: mobilityDetails,
+            user_id: userId
         })
 
         console.log(response)
@@ -42,86 +34,50 @@ export default function TabTwoScreen() {
     }, []);
 
     return (
-        <ParallaxScrollView
-            headerBackgroundColor={{ light: '#411919', dark: '#99c7c7' }}
-            headerImage={
-                <IconSymbol
-                    size={310}
-                    color="#adf7f0"
-                    name="chevron.left.forwardslash.chevron.right"
-                    style={styles.headerImage}
-                />
-            }>
-            <ThemedView style={styles.titleContainer}>
-                <ThemedText
-                    type="title"
-                    style={{
-                        fontFamily: Fonts.rounded,
-                    }}>
-                    Settings
-                </ThemedText>
-            </ThemedView>
-            <ThemedText>Here is where the settings will be:</ThemedText>
+        <SafeAreaView className="flex-1 bg-[#9676E5]">
+            <View className="flex-1 px-6 pt-12 items-center">
 
-            <ThemedText>Full Name:</ThemedText>
-            <View style={styles.container}>
-                <TextInput style={styles.inputs} value={name} onChangeText={setName} />
+                <View className="w-full flex-row items-center mb-8">
+                    <Text className="text-white text-3xl font-bold">Settings</Text>
+                </View>
+
+                <View className="bg-white w-full rounded-2xl p-6 border border-[#9676E5]">
+
+                    <Text className="text-gray-700 font-semibold mb-2">Full Name</Text>
+                    <TextInput
+                        className="w-full border border-gray-300 rounded-lg p-3 mb-4 text-base"
+                        value={name}
+                        onChangeText={setName}
+                        placeholder="John Doe"
+                    />
+
+                    <Text className="text-gray-700 font-semibold mb-2">Passenger number</Text>
+                    <TextInput
+                        className="w-full border border-gray-300 rounded-lg p-3 mb-4 text-base"
+                        value={passengerNumber}
+                        onChangeText={setPassengerNumber}
+                        keyboardType="phone-pad"
+                        placeholder="e.g. 1"
+                    />
+
+                    <Text className="text-gray-700 font-semibold mb-2">Mobility details / companions</Text>
+                    <TextInput
+                        className="w-full border border-gray-300 rounded-lg p-3 mb-8 text-base"
+                        value={mobilityDetails}
+                        onChangeText={setMobilityDetails}
+                        multiline
+                        placeholder="Ex. wheelchair, service animal, etc."
+                    />
+
+                    <TouchableOpacity
+                        className="bg-[#9676E5] w-full py-4 rounded-xl items-center"
+                        onPress={handleSave}
+                    >
+                        <Text className="text-white text-lg font-bold">Save Changes</Text>
+                    </TouchableOpacity>
+
+                </View>
             </View>
-
-            <ThemedText>Passenger number:</ThemedText>
-            <View style={styles.container}>
-                <TextInput style={styles.inputs} value={passengerNumber} onChangeText={setPassengerNumber} />
-            </View>
-
-            <ThemedText>Details on Mobility devices/companions:</ThemedText>
-            <View style={styles.container}>
-                <TextInput style={styles.inputs} value={mobilityDetails} onChangeText={setMobilityDetails} />
-            </View>
-
-
-            <TouchableOpacity style={styles.buttons} onPress={handleSave}>
-                <Text style={styles.buttonText}>Save</Text>
-            </TouchableOpacity>
-
-        </ParallaxScrollView>
+        </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    headerImage: {
-        color: '#808080',
-        bottom: -90,
-        left: -35,
-        position: 'absolute',
-    },
-    titleContainer: {
-        flexDirection: 'row',
-        gap: 8,
-    },
-    container: {
-        flex: 1,
-        backgroundColor: '#ffffff',
-        paddingTop: StatusBar.currentHeight,
-    },
-    inputs: {
-        height: 40,
-        marginTop: 4,
-        marginBottom: 12,
-        borderWidth: 1,
-        padding: 10,
-        borderRadius: 8,
-        borderColor: '#333',
-    },
-    buttons: {
-        backgroundColor: '#5544f0',
-        padding: 12,
-        borderRadius: 8,
-        alignItems: 'center',
-        margin: 12,
-    },
-    buttonText: {
-        color: '#ffffff',
-        fontSize: 16,
-        fontWeight: 'bold',
-    }
-});
