@@ -17,6 +17,7 @@ export default function HomeScreen() {
     }
   }, []);
 
+
   const handleSubmit = async () => {
     if (inputValue.trim()) {
       setUserId(inputValue.trim());
@@ -106,6 +107,7 @@ export default function HomeScreen() {
     </View>
 
   );
+
 }
 
 const styles = StyleSheet.create({

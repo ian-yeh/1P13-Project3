@@ -11,10 +11,11 @@ npx expo start
 npx expo start --clear
 # to clear the cache
 
-### for the voice feature
+#if google signin error
+npx expo install @react-native-google-signin/google-signin
 npx expo prebuild
-npx expo run:ios # if IOS
-npx expo run:android # if ur on android studio
+npx expo run:android
+
 ```
 
 ### Backend
@@ -31,6 +32,7 @@ pip install -r requirements.txt
 fastapi run main.py
 
 # Windows
+python -m venv .venv 
 .venv\Scripts\activate
 pip install -r requirements.txt
 uvicorn main:app --reload

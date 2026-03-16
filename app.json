@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "@react-native-google-signin/google-signin"
+  ],
+  "android": {
+    "package": "com.anonymous.x1p13project3"
+  }
+}
