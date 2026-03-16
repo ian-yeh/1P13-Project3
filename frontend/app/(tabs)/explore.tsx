@@ -101,9 +101,12 @@ export default function TabTwoScreen() {
 
       </ThemedView>
     </ThemedView>
-  );
 
-}
+
+  )
+};
+
+
 
 const styles = StyleSheet.create({
   background: {
@@ -111,10 +114,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#9676E5',
     color: "9676E5",
   },
+  titleContainer: {
+    flexDirection: 'row',
+    gap: 8,
+  },
   container: {
     backgroundColor: '#ffffff',
-    height: '70%',
-    width: '80%',
+    height: 500,
+    width: 350,
     borderRadius: 20,
     overflow: 'hidden',
     borderWidth: 1,
@@ -130,7 +137,9 @@ const styles = StyleSheet.create({
     height: 100,
   },
   topbox: {
+    marginTop: 40,
     backgroundColor: '#9676E5',
+    flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
