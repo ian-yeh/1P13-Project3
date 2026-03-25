@@ -9,7 +9,6 @@ export default function HomeScreen() {
   const [userId, setUserId] = useState<string | null>('');
   const [showModal, setShowModal] = useState(true);
   const [inputValue, setInputValue] = useState('');
-  const name = 'Mark';
 
   useEffect(() => {
     if (!userId) {
@@ -37,7 +36,7 @@ export default function HomeScreen() {
 
   return (
 
-    <View style={styles.background}>
+    <View className="flex-1 bg-[#9676E5]">
 
       {/** This mdodal is to set the user id */}
       <Modal
@@ -46,31 +45,31 @@ export default function HomeScreen() {
         animationType="fade"
         onRequestClose={() => { }}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Enter User ID (just type 1 for demo)</Text>
+        <View className="flex-1 bg-black/50 justify-center items-center">
+          <View className="bg-white rounded-3xl p-8 w-80 items-center">
+            <Text className="text-xl font-bold mb-5 text-[#453B5F]">Enter User ID (just type 1 for demo)</Text>
             <TextInput
-              style={styles.modalInput}
+              className="w-full border border-[#9676E5] rounded-lg p-3 mb-5 text-base"
               value={inputValue}
               onChangeText={setInputValue}
               placeholder="User ID"
               autoFocus
               onSubmitEditing={handleSubmit}
             />
-            <TouchableOpacity style={styles.modalButton} onPress={handleSubmit}>
-              <Text style={styles.modalButtonText}>Submit</Text>
+            <TouchableOpacity className="bg-[#9676E5] p-3 rounded-lg w-full items-center" onPress={handleSubmit}>
+              <Text className="text-white text-base font-bold">Submit</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
 
-      <View style={styles.topbox}>
-        <View style={{ flex: 1, backgroundColor: '#9676E5', justifyContent: 'flex-start' }}>
-          <View style={styles.titleContainer}>
-            <Text className="text-white text-3xl font-semibold mb-4 px-4">DARTS Transportation App</Text>
+      <View className="flex-1 bg-[#9676E5] mt-20 justify-center items-center">
+        <View className="flex-1 bg-[#9676E5] justify-start w-full items-center">
+          <View className="bg-[#9676E5] flex-row items-center gap-2 w-11/12 max-w-sm">
+            <Text className="text-white text-3xl font-semibold mb-4 px-2 w-full">DARTS Transportation App</Text>
           </View>
 
-          <View style={styles.container}>
+          <View className="bg-white border border-[#9676E5] w-11/12 max-w-sm rounded-3xl p-6 mx-3 mb-8">
             <Text className="text-xl font-semibold">Book a Ride</Text>
             <View className="flex-row gap-3 mt-4">
               <Link
@@ -93,8 +92,9 @@ export default function HomeScreen() {
 
           </View>
 
-          <View style={styles.scheduledRides}>
-            <Text className="text-black text-xl font-semibold" style={{ marginBottom: 12 }}>Your Scheduled Rides</Text>
+          <View className="flex-1 bg-white border-t border-[#9676E5] w-full p-6">
+            <Text className="text-black text-2xl font-semibold mb-1">Your Scheduled Rides</Text>
+            <Text className="text-gray-500 text-lg font-bold mb-3">Monthly cancellations remaining: 3</Text>
             {userId && <EventList userId={userId} />}
           </View>
 
@@ -109,111 +109,3 @@ export default function HomeScreen() {
   );
 
 }
-
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    backgroundColor: '#9676E5',
-    color: "9676E5",
-  },
-  topbox: {
-    marginTop: 90,
-    backgroundColor: '#9676E5',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    color: '#ffffff',
-    fontFamily: 'Rounded',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-  },
-  titleContainer: {
-    backgroundColor: '#9676E5',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  container: {
-    backgroundColor: '#ffffff',
-    paddingTop: StatusBar.currentHeight,
-    borderWidth: 1,
-    borderColor: '#9676E5',
-    width: 350,
-    borderRadius: 20,
-    padding: 24,
-    margin: 10,
-  },
-  scheduledRides: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    borderWidth: 1,
-    borderColor: '#9676E5',
-    width: 350,
-    borderRadius: 20,
-    padding: 25,
-    margin: 10,
-    marginBottom: 40,
-  },
-  row: {
-    flexDirection: 'row',
-    gap: 12,
-    marginTop: 16
-  },
-  innercontainer: {
-    flex: 1,
-    backgroundColor: '#CDD3EF',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 14,
-    textAlign: 'center',
-    color: '#453B5F',
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: '#ffffff',
-    borderRadius: 20,
-    padding: 30,
-    width: 300,
-    alignItems: 'center',
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#453B5F',
-  },
-  modalInput: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#9676E5',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 20,
-    fontSize: 16,
-  },
-  modalButton: {
-    backgroundColor: '#9676E5',
-    padding: 12,
-    borderRadius: 8,
-    width: '100%',
-    alignItems: 'center',
-  },
-  modalButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-
-
-});

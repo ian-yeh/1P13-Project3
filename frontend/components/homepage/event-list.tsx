@@ -24,29 +24,31 @@ function EventCard({
   console.log(status)
 
   return (
-    <View>
-      <View
-        className={`py-4 px-4 my-4 rounded-lg border justify-between border-gray-300`}
-      >
-        <View>
-          <Text className="text-lg font-semibold mb-4">{location}</Text>
-        </View>
-        <View className="flex-1 flex-row items-center grid grid-cols-2 gap-8 w-full">
-          <View>
-            <Text className="text-sm font-semibold mb-1 text-gray-600">Departure</Text>
-            <Text className="text-lg">{departureTime.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</Text>
-            <Text className="text-lg">{departureTime.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "EST" })}</Text>
-          </View>
-          <View>
-            <Text className="text-sm font-semibold mb-1 text-gray-600">Arrival</Text>
-            <Text className="text-lg">{arrivalTime.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</Text>
-            <Text className="text-lg">{arrivalTime.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "EST" })}</Text>
-          </View>
-        </View>
-        <Text className="text-sm font-semibold mt-4">Status: <Text
-          className={`${status === "pending" ? "text-purple-400" : status === "cancelled" ? "text-red-400" : "text-green-400"}`}
-        >{status}</Text></Text>
+    <View className="py-5 px-5 my-3 bg-white rounded-xl border border-gray-200">
+      <View className="mb-4">
+        <Text className="text-2xl font-bold text-gray-800">{location}</Text>
       </View>
+
+      <View className="flex-col gap-4 w-full">
+        <View className="bg-gray-50 p-3 rounded-lg border border-gray-100">
+          <Text className="text-sm font-semibold mb-1 text-gray-500">Pick-up (Going to Destination)</Text>
+          <View className="flex-row items-center gap-2">
+            <Text className="text-base font-semibold text-black">{departureTime.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</Text>
+            <Text className="text-base font-semibold text-gray-700">{departureTime.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</Text>
+          </View>
+        </View>
+        <View className="bg-gray-50 p-3 rounded-lg border border-gray-100">
+          <Text className="text-sm font-semibold mb-1 text-gray-500">Return (Leaving Destination)</Text>
+          <View className="flex-row items-center gap-2">
+            <Text className="text-base font-semibold text-black">{arrivalTime.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</Text>
+            <Text className="text-base font-semibold text-gray-700">{arrivalTime.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</Text>
+          </View>
+        </View>
+      </View>
+
+      <Text className="text-sm font-bold mt-5 text-gray-700">Status: <Text
+        className={`${status === "pending" ? "text-purple-600" : status === "cancelled" ? "text-red-500" : "text-green-600"}`}
+      >{status}</Text></Text>
     </View>
   )
 }
@@ -78,7 +80,7 @@ export function EventList({ userId }: EventListProps) {
   );
 
   return (
-    <View className="flex-1 w-full">
+    <View className="flex-1 w-full shadow-sm">
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
         {events && events.length > 0 ? (
           events.map((item, i) => (
