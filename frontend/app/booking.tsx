@@ -1,9 +1,9 @@
 import { useUser } from "@/store/useStore"
-import { View, Text, TextInput, TouchableOpacity } from "react-native"
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native"
 import { scheduleEvent } from "@/api/api";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DatePicker from "react-native-date-picker";
 
 
 const BookingPage = () => {
@@ -16,7 +16,28 @@ const BookingPage = () => {
   const [showDeparturePicker, setShowDeparturePicker] = useState(false)
   const [showArrivalPicker, setShowArrivalPicker] = useState(false)
 
+  const handleDepartureConfirm = (date: Date) => {
+    setShowDeparturePicker(false);
+    // checking if you schedule a ride in the past.
+    if (date < new Date()) {
+      Alert.alert("Invalid time. You cannot schedule a ride in the past.");
+      return;
+    }
+    setDepartureTime(date);
+  };
+
+  const handleArrivalConfirm = (date: Date) => {
+    setShowArrivalPicker(false);
+    if (departureTime && date < departureTime) {
+      Alert.alert("Invalid time. Arrival time cannot be before the departure time.");
+      return;
+    }
+    setArrivalTime(date);
+  };
+
   const handleBook = async () => {
+
+    // creating book request to the backend
     const response = await scheduleEvent({
       name: "Mark",
       date: new Date(),
@@ -48,7 +69,7 @@ const BookingPage = () => {
         </View>
 
         <View>
-          <Text className="mt-4 text-base font-semibold" style={{ color: '#453B5F' }}>Departure Time</Text>
+          <Text className="mt-4 text-base font-semibold" style={{ color: '#453B5F' }}>Pick-up Time (Going to Destination)</Text>
 
           <TouchableOpacity
             className="border rounded-lg p-3 mt-1.5"
@@ -58,20 +79,20 @@ const BookingPage = () => {
           </TouchableOpacity>
 
           {showDeparturePicker && (
-            <DateTimePicker
-              value={departureTime ?? new Date()}
-              mode="datetime"
-              display="spinner"
-              onChange={(event, selectedDate) => {
+            <DatePicker
+              modal
+              open={showDeparturePicker}
+              date={departureTime ?? new Date()}
+              onConfirm={handleDepartureConfirm}
+              onCancel={() => {
                 setShowDeparturePicker(false)
-                if (selectedDate) setDepartureTime(selectedDate)
               }}
             />
           )}
         </View>
 
         <View>
-          <Text className="mt-4 text-base font-semibold" style={{ color: '#453B5F' }}>Arrival Time</Text>
+          <Text className="mt-4 text-base font-semibold" style={{ color: '#453B5F' }}>Return Time (Leaving Destination)</Text>
 
           <TouchableOpacity
             className="border rounded-lg p-3 mt-1.5"
@@ -81,13 +102,13 @@ const BookingPage = () => {
           </TouchableOpacity>
 
           {showArrivalPicker && (
-            <DateTimePicker
-              value={arrivalTime ?? new Date()}
-              mode="datetime"
-              display="spinner"
-              onChange={(event, selectedDate) => {
+            <DatePicker
+              modal
+              open={showArrivalPicker}
+              date={arrivalTime ?? new Date()}
+              onConfirm={handleArrivalConfirm}
+              onCancel={() => {
                 setShowArrivalPicker(false)
-                if (selectedDate) setArrivalTime(selectedDate)
               }}
             />
           )}
