@@ -36,7 +36,7 @@ async def create_event(event_data: Event):
     database_worker.write_event(event_data.to_firestore())
     
     # building a hybrid message with event info
-    mp3_link = "https://drive.google.com/uc?export=download&id=1CnUncHXdaykLl1FmLfdcO83AQVZ8m_DX"
+    mp3_link = "https://raw.githubusercontent.com/ian-yeh/1P13-Project3/main/backend/assets/twilio_call.mp3"
     details = f"New booking: {event_data.name}. Location: {event_data.location}. Arrival at {event_data.arrival_time.strftime('%I:%M %p')}. Departure at {event_data.departure_time.strftime('%I:%M %p')}."
     
     twiml = f"""
