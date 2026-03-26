@@ -42,7 +42,7 @@ async def create_event(event_data: Event):
     twiml = f"""
     <Response>
         <Play>{mp3_link}</Play>
-        <Say voice="Polly.Joey-Neural">Hi! {details}. See you then!</Say>
+        <Say voice="Polly.Joey-Neural">Hi! {details}. Thank you, and see you then!</Say>
     </Response>
     """
     
