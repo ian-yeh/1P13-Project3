@@ -35,11 +35,19 @@ async def root():
 async def create_event(event_data: Event):
     database_worker.write_event(event_data.to_firestore())
     
-    # calling Omar's number
-    mp3_link = "https://drive.google.com/file/d/1CnUncHXdaykLl1FmLfdcO83AQVZ8m_DX/view?usp=sharing"
-    call_result = calling_agent.call(OMAR, mp3_link)
-
-    print(call_result)
+    # building a hybrid message with event info
+    mp3_link = "https://drive.google.com/uc?export=download&id=1CnUncHXdaykLl1FmLfdcO83AQVZ8m_DX"
+    details = f"New booking: {event_data.name}. Location: {event_data.location}. Arrival at {event_data.arrival_time.strftime('%I:%M %p')}. Departure at {event_data.departure_time.strftime('%I:%M %p')}."
+    
+    twiml = f"""
+    <Response>
+        <Play>{mp3_link}</Play>
+        <Say voice="Polly.Joey-Neural">Hi! {details}. See you then!</Say>
+    </Response>
+    """
+    
+    call_result = calling_agent.call(OMAR, twiml)
+    print(f"Hybrid call sid: {call_result}")
 
 
     return {"message": "Event created successfully"}
