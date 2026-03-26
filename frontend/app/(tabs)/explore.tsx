@@ -51,6 +51,7 @@ async function syncBackendEvents(token: string, userId: string) {
 
 GoogleSignin.configure({
   webClientId: '48917778841-pkre4vjbug3u4i3vrveok241jocfj9m3.apps.googleusercontent.com',
+  iosClientId: '48917778841-pkre4vjbug3u4i3vrveok241jocfj9m3.apps.googleusercontent.com',
   scopes: ['https://www.googleapis.com/auth/calendar.events',
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/userinfo.profile',
