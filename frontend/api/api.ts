@@ -9,9 +9,6 @@ let API_HOST = "http://127.0.0.1:8000";
 if (Platform.OS === 'android') API_HOST = "http://10.0.2.2:8000";
 if (isDev === 'false') API_HOST = process.env.EXPO_PUBLIC_BASE_API_URL!;
 
-API_HOST = "http://172.18.32.64:8000";
-
-
 const API_BASE_URL = `${API_HOST}/api`;
 
 export function scheduleEvent(eventData: any) {
