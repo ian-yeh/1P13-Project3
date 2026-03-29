@@ -8,7 +8,7 @@ import { getEvents } from '@/api/api';
 import { useUser } from '@/store/useStore';
 
 const CALENDAR_ID = 'suerderin@gmail.com'; // your personal calendar
-const ACCESS_TOKEN = 'ya29.a0Aa7MYipsL_I6W72FPL-YaPs01Qcql1SUw8wplm340V6NJ4QBBOl4e0AmqhClGEnqe-PVqHGrEHyIeWflWCPuS40ffUJdyDH9nJv9EPdCbpYgJ4vpoyuuZ-dRJ-Ao7cfRIYE63__TzE9h7oWYrvYMLoATiXtMrGT-zBgAhAJhqzJf3iYxn6w3ok6Q53j4w7HzK1lRcDAaCgYKAe4SARISFQHGX2MihkagPEwZ3IC5CWH-rlcBiA0206';
+const ACCESS_TOKEN = '';
 
 interface BackendEvent {
   name: string;
