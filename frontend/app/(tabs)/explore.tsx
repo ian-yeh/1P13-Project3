@@ -4,9 +4,11 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Fonts } from '@/constants/theme';
 import { useState, useEffect } from 'react';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { getEvents } from '@/api/api';
 import { useUser } from '@/store/useStore';
+
+const CALENDAR_ID = 'suerderin@gmail.com'; // your personal calendar
+const ACCESS_TOKEN = 'ya29.a0Aa7MYipsL_I6W72FPL-YaPs01Qcql1SUw8wplm340V6NJ4QBBOl4e0AmqhClGEnqe-PVqHGrEHyIeWflWCPuS40ffUJdyDH9nJv9EPdCbpYgJ4vpoyuuZ-dRJ-Ao7cfRIYE63__TzE9h7oWYrvYMLoATiXtMrGT-zBgAhAJhqzJf3iYxn6w3ok6Q53j4w7HzK1lRcDAaCgYKAe4SARISFQHGX2MihkagPEwZ3IC5CWH-rlcBiA0206';
 
 interface BackendEvent {
   name: string;
@@ -14,6 +16,28 @@ interface BackendEvent {
   location?: string;
   arrival_time?: string;
   departure_time?: string;
+}
+
+async function getExistingEvents(token: string): Promise<Set<string>> {
+  const res = await fetch(
+    `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?maxResults=2500`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  if (!res.ok) {
+    const err = await res.text();
+    console.error('Failed to fetch existing events:', err);
+    return new Set();
+  }
+  const data = await res.json();
+  // Build a set of "title|startISO" keys to check for duplicates
+  const keys = new Set<string>();
+  for (const item of data.items || []) {
+    const start = item.start?.dateTime || item.start?.date || '';
+    keys.add(`${item.summary}|${start}`);
+  }
+  return keys;
 }
 
 async function insertIntoGoogleCalendar(token: string, ev: BackendEvent) {
@@ -25,12 +49,12 @@ async function insertIntoGoogleCalendar(token: string, ev: BackendEvent) {
   }
 
   const res = await fetch(
-    "https://www.googleapis.com/calendar/v3/calendars/351ee7846ff13923dc09b40377d0e5e0a731cc2f7c5c99113c343d4154000170@group.calendar.google.com/events",
+    `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events`,
     {
-      method: "POST",
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         summary: ev.name,
@@ -42,55 +66,50 @@ async function insertIntoGoogleCalendar(token: string, ev: BackendEvent) {
   );
 
   if (!res.ok) {
-    const err = await res.json();
-    throw new Error(`Google Calendar API error: ${JSON.stringify(err)}`);
+    const err = await res.text();
+    throw new Error(`Calendar API error: ${err}`);
   }
 }
 
 async function syncBackendEvents(token: string, userId: string) {
-  const list: BackendEvent[] = await getEvents(userId);
-  console.log(`Syncing ${list.length} events...`);
+  const [list, existingKeys] = await Promise.all([
+    getEvents(userId) as Promise<BackendEvent[]>,
+    getExistingEvents(token),
+  ]);
+
+  console.log(`Fetched ${list.length} events from DB`);
+  console.log(`Found ${existingKeys.size} existing calendar events`);
 
   let success = 0;
+  let skipped = 0;
   let failed = 0;
 
   for (const ev of list) {
     try {
+      let startDate = new Date(ev.arrival_time || ev.date);
+      let endDate = new Date(ev.departure_time || ev.date);
+      if (endDate <= startDate) {
+        endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+      }
+
+      const dupKey = `${ev.name}|${startDate.toISOString()}`;
+      if (existingKeys.has(dupKey)) {
+        console.log(`Skipping duplicate: ${ev.name} at ${ev.location}`);
+        skipped++;
+        continue;
+      }
+
       await insertIntoGoogleCalendar(token, ev);
+      existingKeys.add(dupKey); // prevent dupes within same sync
       success++;
     } catch (err) {
-      console.warn(`Failed to insert "${ev.name}" at ${ev.location}:`, err);
+      console.warn(`Failed: ${ev.name} at ${ev.location}:`, err);
       failed++;
     }
   }
 
-  console.log(`Sync complete: ${success} inserted, ${failed} failed`);
+  console.log(`Sync complete: ${success} inserted, ${skipped} skipped, ${failed} failed`);
 }
-
-GoogleSignin.configure({
-  webClientId: '48917778841-n64b7ricc7kun7o528oi1qijgfk9p3a7.apps.googleusercontent.com',
-  scopes: [
-    'https://www.googleapis.com/auth/calendar.events',
-    'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/userinfo.profile',
-    'https://www.googleapis.com/auth/calendar',
-    'openid',
-  ],
-});
-
-const signIn = async (): Promise<string | null> => {
-  try {
-    await GoogleSignin.hasPlayServices();
-    const response = await GoogleSignin.signIn(); // This throws if user cancels or 403
-    if (!response) return null;
-
-    const tokens = await GoogleSignin.getTokens(); // Only called if signIn succeeded
-    return tokens.accessToken;
-  } catch (error) {
-    console.error('Google Sign-In error:', error);
-    return null;
-  }
-};
 
 export default function ExploreScreen() {
   const [synced, setSynced] = useState(false);
@@ -101,10 +120,11 @@ export default function ExploreScreen() {
     (async () => {
       if (!userId) return;
       setSyncing(true);
-      const token = await signIn();
-      if (token) {
-        await syncBackendEvents(token, userId);
+      try {
+        await syncBackendEvents(ACCESS_TOKEN, userId);
         setSynced(true);
+      } catch (err) {
+        console.error('Sync failed:', err);
       }
       setSyncing(false);
     })();
@@ -121,7 +141,8 @@ export default function ExploreScreen() {
           <WebView
             userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
             style={styles.webview}
-            source={{ uri: 'https://calendar.google.com/calendar/embed?src=351ee7846ff13923dc09b40377d0e5e0a731cc2f7c5c99113c343d4154000170%40group.calendar.google.com&ctz=America%2FToronto' }} />
+            source={{ uri: `https://calendar.google.com/calendar/embed?src=${encodeURIComponent(CALENDAR_ID)}&ctz=America%2FToronto` }}
+          />
         </ThemedView>
       </ThemedView>
     </ThemedView>
@@ -131,7 +152,7 @@ export default function ExploreScreen() {
 const styles = StyleSheet.create({
   background: { flex: 1, backgroundColor: '#9676E5' },
   headerText: {
-    fontFamily: Fonts.rounded,
+    fontFamily: 'System',
     textAlign: 'center',
     color: '#ffffff',
     marginTop: '10%',
