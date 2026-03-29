@@ -6,9 +6,9 @@ import { Fonts } from '@/constants/theme';
 import { useState, useEffect } from 'react';
 import { getEvents } from '@/api/api';
 import { useUser } from '@/store/useStore';
+import { ACCESS_TOKEN } from '@env';
 
 const CALENDAR_ID = 'suerderin@gmail.com'; // your personal calendar
-const ACCESS_TOKEN = '';
 
 interface BackendEvent {
   name: string;
