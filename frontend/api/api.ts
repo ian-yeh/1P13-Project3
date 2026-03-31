@@ -7,9 +7,14 @@ let API_HOST = "http://127.0.0.1:8000";
 
 // for android people - they use a different port ig
 if (Platform.OS === 'android') API_HOST = "http://10.0.2.2:8000";
-if (isDev === 'false') API_HOST = process.env.EXPO_PUBLIC_BASE_API_URL!;
+
+// if we are not in dev mode, use the production url
+if (isDev === 'false' || !isDev) {
+    API_HOST = process.env.EXPO_PUBLIC_BASE_API_URL!;
+}
 
 const API_BASE_URL = `${API_HOST}/api`;
+// console.log(API_BASE_URL);
 
 export function scheduleEvent(eventData: any) {
     return fetch(`${API_BASE_URL}/create_event`, {

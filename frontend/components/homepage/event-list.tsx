@@ -22,8 +22,8 @@ function EventCard({
   eventId, arrivalTime, departureTime, location, name, userId, status, onDelete
 }: EventCardProps) {
 
-  console.log(arrivalTime, departureTime)
-  console.log(status)
+  //console.log(arrivalTime, departureTime)
+  //console.log(status)
 
   const handleDelete = () => {
     Alert.alert(
@@ -40,7 +40,7 @@ function EventCard({
     <View className="py-5 px-5 my-3 bg-white rounded-xl border border-gray-200">
       <View className="mb-4 flex-row justify-between items-center">
         <Text className="text-2xl font-bold text-gray-800 flex-1">{location}</Text>
-        <TouchableOpacity onPress={handleDelete} className="bg-red-100 px-3 py-2 rounded-lg border border-red-200 ml-2">
+        <TouchableOpacity onPress={handleDelete} className="bg-red-200 px-3 py-2 rounded-lg ml-2">
           <Text className="text-red-600 font-bold text-base uppercase">Delete</Text>
         </TouchableOpacity>
       </View>
