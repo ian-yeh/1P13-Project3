@@ -1,8 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { Fonts } from '@/constants/theme';
 import { useState, useEffect } from 'react';
 import { getEvents } from '@/api/api';
@@ -158,26 +156,39 @@ export default function ExploreScreen() {
   }, [userId]);
 
   return (
-    <ThemedView style={styles.background}>
-      <ThemedText type="title" style={styles.headerText}>Calendar</ThemedText>
-      <ThemedText style={styles.statusText}>
-        {syncing ? 'Syncing events...' : synced ? 'Events synced ✓' : ''}
-      </ThemedText>
-      <ThemedView style={styles.topbox}>
-        <ThemedView style={styles.container}>
+    <View style={styles.background}>
+      <View className="bg-[#9676E5] pt-16 pb-6 z-10">
+        <Text className='text-white text-5xl font-bold mx-auto text-center mt-4'>Calendar</Text>
+
+        <View className="bg-[#CDD3EF] mx-6 mt-6 p-4 rounded-xl flex-row justify-center items-center border border-[#8C6ED6]">
+          {syncing ? (
+            <>
+              <ActivityIndicator color="#453B5F" />
+              <Text className="text-[#453B5F] text-base font-semibold ml-3">Syncing events with Google...</Text>
+            </>
+          ) : synced ? (
+            <Text className="text-[#453B5F] text-base font-bold">Google Calendar Sync Complete!</Text>
+          ) : (
+            <Text className="text-[#453B5F] text-base font-medium">Waiting to sync...</Text>
+          )}
+        </View>
+      </View>
+
+      <View style={styles.topbox}>
+        <View style={styles.container}>
           <WebView
             userAgent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
             style={styles.webview}
             source={{ uri: `https://calendar.google.com/calendar/embed?src=${encodeURIComponent(CALENDAR_ID)}&ctz=America%2FToronto` }}
           />
-        </ThemedView>
-      </ThemedView>
-    </ThemedView>
+        </View>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  background: { flex: 1, backgroundColor: '#9676E5' },
+  background: { flex: 1, backgroundColor: '#F0F2FA' },
   headerText: {
     fontFamily: 'System',
     textAlign: 'center',
@@ -187,26 +198,21 @@ const styles = StyleSheet.create({
     padding: 20,
     height: 100,
   },
-  statusText: {
-    color: '#ffffff',
-    textAlign: 'center',
-    fontSize: 14,
-    marginBottom: 8,
-  },
   topbox: {
-    marginTop: 40,
-    backgroundColor: '#9676E5',
+    marginTop: -20,
+    paddingTop: 40,
+    backgroundColor: '#F0F2FA',
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
   container: {
     backgroundColor: '#ffffff',
-    height: 500,
-    width: 350,
+    height: 550,
+    width: 360,
     borderRadius: 20,
     overflow: 'hidden',
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#9676E5',
   },
   webview: { flex: 1 },

@@ -30,6 +30,15 @@ export function getEvents(userId: string) {
         .catch(error => console.error('Error fetching events:', error));
 }
 
+// delete an event
+export function deleteEvent(eventId: string) {
+    return fetch(`${API_BASE_URL}/delete_event/${eventId}`, {
+        method: 'DELETE'
+    })
+        .then(response => response.json())
+        .catch(error => console.error('Error deleting event:', error));
+}
+
 // updating user details in db, using user ID that is stored in the userData object
 export function updateUser(userId: string, userData: any) {
     return fetch(`${API_BASE_URL}/update_user/${userId}`, {
