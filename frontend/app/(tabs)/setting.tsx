@@ -38,13 +38,13 @@ export default function TabTwoScreen() {
 
     return (
         <View className="flex-1 bg-[#F0F2FA]">
-            {/* Header Block matching Calendar page */}
+            { /** header section that matches the styling of the calendar page */}
             <View className="bg-[#9676E5] pt-16 pb-6 z-10 w-full items-center">
                 <Text className="text-white text-5xl font-bold mt-4">Settings</Text>
             </View>
 
             <View className="flex-1 px-6 pt-12 items-center">
-                {/* main settings form block */}
+                {/* main settings form section */}
                 <View className="bg-white w-full p-6 border-2 border-[#9676E5]">
 
                     <Text className="text-gray-700 font-semibold mb-2">Full Name</Text>
