@@ -55,20 +55,13 @@ const BookingPage = () => {
 
   return (
     <View className="flex-1 items-center" style={{ backgroundColor: '#9676E5', paddingBottom: 40 }}>
-      <View className="mb-6 w-[350px] mt-4">
-
-        <View className="w-full mt-16 mb-8 flex-row justify-start">
-          <TouchableOpacity onPress={() => navigator.goBack()}>
-            <Text className="text-white text-xl font-semibold underline">Go Back</Text>
-          </TouchableOpacity>
-        </View>
-
-        <Text className="text-white text-3xl font-semibold">Book a Ride</Text>
+      <View className="mb-6 w-[350px] mt-16">
+        <Text className="text-white text-5xl font-semibold">Book a Ride</Text>
       </View>
 
       <View className="bg-white rounded-2xl p-6 w-[350px] border" style={{ borderColor: '#9676E5' }}>
-        <Text className="font-bold text-2xl mb-1 text-[#453B5F]">Hello, {userData.name}.</Text>
-        <Text className="text-sm mb-6 text-gray-500">Fill out the details below to schedule your trip.</Text>
+        <Text className="font-bold text-3xl mb-2 text-[#453B5F]">Hello, {userData.name}.</Text>
+        <Text className="text-md mb-6 text-gray-500">Fill out the details below to schedule your trip.</Text>
 
         <View>
           <Text className="mt-4 text-base font-semibold" style={{ color: '#453B5F' }}>Enter Destination</Text>

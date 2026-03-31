@@ -10,10 +10,12 @@ export default function TabTwoScreen() {
     const [passengerNumber, setPassengerNumber] = useState('');
     const [mobilityDetails, setMobilityDetails] = useState('');
     const [userId, setUserId] = useState('');
+
     const navigator = useNavigation();
 
     const handleSave = async () => {
-        console.log('Settings saved:', { name, passengerNumber, mobilityDetails, userId });
+        // console.log('Settings saved:', { name, passengerNumber, mobilityDetails, userId });
+
         const response = await updateUser(userId, {
             name: name,
             passenger_number: passengerNumber,
@@ -21,11 +23,11 @@ export default function TabTwoScreen() {
             user_id: userId
         })
 
-        console.log(response)
+        // console.log(response) // check if updating actually works
         navigator.goBack();
     }
 
-    // fetching global user state
+    // load from global state temp
     useEffect(() => {
         const userData: any = useUser.getState();
         setName(userData.name);
@@ -35,14 +37,15 @@ export default function TabTwoScreen() {
     }, []);
 
     return (
-        <SafeAreaView className="flex-1 bg-[#9676E5]">
+        <View className="flex-1 bg-[#F0F2FA]">
+            { /** header section that matches the styling of the calendar page */}
+            <View className="bg-[#9676E5] pt-16 pb-6 z-10 w-full items-center">
+                <Text className="text-white text-5xl font-bold mt-4">Settings</Text>
+            </View>
+
             <View className="flex-1 px-6 pt-12 items-center">
-
-                <View className="w-full flex-row items-center mb-8">
-                    <Text className="text-white text-3xl font-bold">Settings</Text>
-                </View>
-
-                <View className="bg-white w-full rounded-2xl p-6 border border-[#9676E5]">
+                {/* main settings form section */}
+                <View className="bg-white w-full p-6 border-2 border-[#9676E5]">
 
                     <Text className="text-gray-700 font-semibold mb-2">Full Name</Text>
                     <TextInput
@@ -79,6 +82,6 @@ export default function TabTwoScreen() {
 
                 </View>
             </View>
-        </SafeAreaView>
+        </View>
     );
 }

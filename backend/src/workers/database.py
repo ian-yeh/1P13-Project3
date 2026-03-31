@@ -33,9 +33,15 @@ class DatabaseWorker:
         events = []
 
         for doc in events_list:
-            events.append(doc.to_dict())
+            data = doc.to_dict()
+            data['id'] = doc.id # need this so the frontend can delete it
+            events.append(data)
 
         return events
+
+    def delete_event(self, event_id: str):
+        self.db.collection("events").document(event_id).delete()
+        return True
 
     def write_user(self):
         pass

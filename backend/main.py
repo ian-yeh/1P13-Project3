@@ -65,6 +65,11 @@ async def update_event(event_id: str, event_data: Event):
 
     return {"message": "Event updated successfully"}
 
+@app.delete("/api/delete_event/{event_id}")
+async def delete_event(event_id: str):
+    database_worker.delete_event(event_id)
+    return {"message": "Event deleted successfully"}
+
 @app.get("/api/get_events/{user_id}")
 async def get_all_events(user_id: str):
     event_array = database_worker.get_events(user_id)
