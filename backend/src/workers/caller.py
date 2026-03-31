@@ -6,10 +6,10 @@ class CallingAgent:
         self.client = Client(sid, auth_token)
         self.from_number = from_number
 
-    def call(self, phone_number, mp3):
+    def call(self, phone_number, twiml):
         call = self.client.calls.create(
             to=phone_number,
             from_=self.from_number,
-            twiml=f'<Response><Play>{mp3}</Play></Response>'
+            twiml=twiml
         )
         return call.sid

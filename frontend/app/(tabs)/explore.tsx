@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Fonts } from '@/constants/theme';
@@ -111,10 +112,36 @@ async function syncBackendEvents(token: string, userId: string) {
   console.log(`Sync complete: ${success} inserted, ${skipped} skipped, ${failed} failed`);
 }
 
+GoogleSignin.configure({
+  webClientId: '48917778841-pkre4vjbug3u4i3vrveok241jocfj9m3.apps.googleusercontent.com',
+  iosClientId: '48917778841-pkre4vjbug3u4i3vrveok241jocfj9m3.apps.googleusercontent.com',
+  scopes: ['https://www.googleapis.com/auth/calendar.events',
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'openid'
+  ],
+});
+
+const signIn = async (): Promise<string | null> => {
+  try {
+    await GoogleSignin.hasPlayServices();
+    const response = await GoogleSignin.signIn();
+    if (response) {
+      const tokens = await GoogleSignin.getTokens();
+      console.log('Access Token:', tokens.accessToken);
+      return tokens.accessToken;
+    }
+  } catch (error) {
+    console.error('Detailed Login Error:', error);
+  }
+  return null;
+};
+
 export default function ExploreScreen() {
   const [synced, setSynced] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const userId = useUser((state) => state.userId);
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {

@@ -11,7 +11,7 @@ OMAR = os.getenv("OMAR")
 
 agent = CallingAgent(SID, TOKEN, TWILIO_NUMBER)
 
-mp3_link = "https://drive.google.com/file/d/1CnUncHXdaykLl1FmLfdcO83AQVZ8m_DX/view?usp=sharing"
+mp3_link = "https://drive.google.com/uc?export=download&id=1CnUncHXdaykLl1FmLfdcO83AQVZ8m_DX"
 call_result = agent.call(OMAR, mp3_link)
 
 print(call_result)
