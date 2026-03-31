@@ -1,4 +1,5 @@
 import { TouchableOpacity, View, Text, ScrollView } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 import { useState } from "react";
 import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from "expo-speech-recognition";
 import { parseVoiceCommand } from "@/utils/voice-action";
@@ -82,15 +83,15 @@ const VoicePage = () => {
 
     return (
         <View className="flex-1 bg-[#9676E5]">
-            <View className="mt-[90px] flex-1 bg-[#9676E5] items-center">
+            <View className="mt-10 flex-1 bg-[#9676E5] items-center">
 
-                <View className="bg-[#9676E5] items-center mb-8">
-                    <Text className="text-white text-3xl font-bold mb-8">Voice Assistant</Text>
+                <View className="bg-[#9676E5] items-center mb-10">
+                    {/* microphone button for voice - press to start */}
                     <TouchableOpacity
                         onPress={handleSpeak}
-                        className="bg-[#CDD3EF] py-3.5 px-8 rounded-lg items-center justify-center"
+                        className={`w-48 h-48 rounded-full items-center justify-center ${isListening ? 'bg-red-400' : 'bg-[#CDD3EF]'}`}
                     >
-                        <Text className="text-base font-bold text-[#453B5F]">Press to start speaking</Text>
+                        <FontAwesome name="microphone" size={80} color="#453B5F" />
                     </TouchableOpacity>
                 </View>
 
@@ -106,14 +107,22 @@ const VoicePage = () => {
                 </View>
 
                 <View className="w-[350px] bg-white rounded-2xl p-6 mb-10">
-                    <Text className="text-lg font-bold text-[#453B5F] mb-3">Event Data:</Text>
-                    <Text className="text-base text-[#453B5F]">Name: {eventData?.name}</Text>
-                    <Text className="text-base text-[#453B5F]">Date: {eventData?.date.toDateString()}</Text>
-                    <Text className="text-base text-[#453B5F]">Location: {eventData?.location}</Text>
-                    <Text className="text-base text-[#453B5F]">Arrival Time: {eventData?.arrival_time?.toLocaleTimeString()}</Text>
-                    <Text className="text-base text-[#453B5F]">Departure Time: {eventData?.departure_time?.toLocaleTimeString()}</Text>
-                    <Text className="text-base text-[#453B5F]">User ID: {eventData?.user_id}</Text>
-                    <Text className="text-base text-[#453B5F]">Status: {eventData?.status}</Text>
+                    <Text className="text-xl font-bold text-[#453B5F] mb-4">Confirm Ride Details</Text>
+
+                    <View>
+                        <Text className="text-lg text-gray-500 mb-4">
+                            {eventData ? "Scheduled for " + eventData?.date.toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' }) : "Schedule a ride!"}
+                        </Text>
+                        <Text className="text-base text-[#453B5F]">
+                            <Text className="font-bold">Destination:</Text> {eventData?.location || ""}
+                        </Text>
+                        <Text className="text-base text-[#453B5F] mt-2">
+                            <Text className="font-bold">Pick-up:</Text> {eventData?.departure_time?.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) || ""}
+                        </Text>
+                        <Text className="text-base text-[#453B5F] mt-2">
+                            <Text className="font-bold">Return:</Text> {eventData?.arrival_time?.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) || ""}
+                        </Text>
+                    </View>
                 </View>
 
                 {eventData && (

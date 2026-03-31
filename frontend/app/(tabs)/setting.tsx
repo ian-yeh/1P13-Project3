@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '@/store/useStore';
 import { updateUser } from '@/api/api';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function TabTwoScreen() {
     const [name, setName] = useState('');
