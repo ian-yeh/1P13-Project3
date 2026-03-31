@@ -7,8 +7,8 @@ import { useState, useEffect } from 'react';
 import { getEvents } from '@/api/api';
 import { useUser } from '@/store/useStore';
 
-const CALENDAR_ID = 'suerderin@gmail.com';
-const ACCESS_TOKEN = 'ya29.a0Aa7MYio11LLWQuobWwnX8RepSwlrVOfc0QeRMLapzIbgpV30zTHcFbi7P-Kw8deK-c5U3z0fTIloc-yoUDeLeVLRbetNjMhC5SNtPUdGLcuwUIUmUnyQZJ8uNq__hg3GKdOgVEyooQBRzCm_1dKSsfi8pQ86UGHo2ek_vxuVsXyNh33ebX55sdJu4-Kr1bsOPoEWRHAaCgYKAbESARISFQHGX2Mi9v44ZvuiUiqFHYOgeY3J4Q0206';
+const CALENDAR_ID = process.env.EXPO_PUBLIC_GOOGLE_CALENDAR_ID || '';
+const ACCESS_TOKEN = process.env.EXPO_PUBLIC_GOOGLE_OAUTH_TOKEN || '';
 
 interface BackendEvent {
   name: string;
