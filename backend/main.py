@@ -5,6 +5,8 @@ from src.models.core_models import Event, User
 from dotenv import load_dotenv
 import os
 from fastapi.middleware.cors import CORSMiddleware
+from zoneinfo import ZoneInfo
+EST = ZoneInfo("America/Toronto")
 
 # loading env vars
 load_dotenv()
@@ -35,9 +37,13 @@ async def root():
 async def create_event(event_data: Event):
     database_worker.write_event(event_data.to_firestore())
     
+    # convert times to EST for the voice assistant
+    arrival_est = event_data.arrival_time.astimezone(EST)
+    departure_est = event_data.departure_time.astimezone(EST)
+
     # building a hybrid message with event info
     mp3_link = "https://raw.githubusercontent.com/ian-yeh/1P13-Project3/main/backend/assets/mark_audio.mp3"
-    details = f"This is a voice assistant calling for {event_data.name}. You have a new booking: {event_data.name}. Location: {event_data.location}. Arrival at {event_data.arrival_time.strftime('%I:%M %p')}. Departure at {event_data.departure_time.strftime('%I:%M %p')}."
+    details = f"This is a voice assistant calling for {event_data.name}. Your pickup location is {event_data.location}. Pickup at home at {departure_est.strftime('%I:%M %p')}. Return home at {arrival_est.strftime('%I:%M %p')}."
     
     twiml = f"""
     <Response>
